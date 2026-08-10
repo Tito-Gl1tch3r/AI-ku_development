@@ -1,0 +1,117 @@
+{
+  "architectures": [
+    "V4XForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "auto_map": {
+    "AutoConfig": "modeling_v4x.V4XConfig",
+    "AutoModelForCausalLM": "modeling_v4x.V4XForCausalLM"
+  },
+  "bos_token_id": 1,
+  "chunk_size": 128,
+  "conv_kernel": 4,
+  "eos_token_id": 2,
+  "expand": 2,
+  "head_dim": 128,
+  "hidden_dropout": 0.0,
+  "hidden_size": 2688,
+  "hybrid_override_pattern": "MEMEM*EMEMEM*EMEMEM*EMEMEM*EMEMEM*EMEMEMEM*EMEMEMEME",
+  "initializer_range": 0.02,
+  "intermediate_size": 1856,
+  "layer_norm_epsilon": 1e-05,
+  "mamba_head_dim": 64,
+  "mamba_hidden_act": "silu",
+  "mamba_num_heads": 64,
+  "mamba_proj_bias": false,
+  "mamba_ssm_cache_dtype": "float32",
+  "max_position_embeddings": 1048576,
+  "mlp_bias": false,
+  "mlp_hidden_act": "relu2",
+  "model_type": "V4X",
+  "moe_intermediate_size": 1856,
+  "moe_shared_expert_intermediate_size": 3712,
+  "n_group": 1,
+  "n_groups": 8,
+  "n_routed_experts": 128,
+  "n_shared_experts": 1,
+  "norm_eps": 1e-05,
+  "norm_topk_prob": true,
+  "num_attention_heads": 32,
+  "num_experts_per_tok": 6,
+  "num_hidden_layers": 52,
+  "num_key_value_heads": 2,
+  "num_logits_to_keep": 1,
+  "pad_token_id": 0,
+  "partial_rotary_factor": 1.0,
+  "rescale_prenorm_residual": true,
+  "residual_in_fp32": false,
+  "rope_theta": 10000,
+  "routed_scaling_factor": 2.5,
+  "sliding_window": null,
+  "ssm_state_size": 128,
+  "tie_word_embeddings": false,
+  "time_step_floor": 0.0001,
+  "time_step_max": 0.1,
+  "time_step_min": 0.001,
+  "topk_group": 1,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.55.4",
+  "use_bias": false,
+  "use_cache": true,
+  "use_conv_bias": true,
+  "use_mamba_kernels": true,
+  "vocab_size": 131072,
+  "num_experts": 178,
+  "rope_scaling": {
+    "type": "yarn",
+    "factor": 4.0,
+    "original_max_position_embeddings": 262144,
+    "finetuned": false
+  },
+  "v4x_expert_config": {
+    "num_base_experts": 128,
+    "num_shared_experts": 1,
+    "num_qwen_experts": 48,
+    "num_phi_experts": 1,
+    "total_experts": 178,
+    "expert_map": {
+      "0-127": {
+        "origin": "nemotron",
+        "type": "general",
+        "activation": "relu2"
+      },
+      "128": {
+        "origin": "nemotron",
+        "type": "shared",
+        "activation": "relu2"
+      },
+      "129-176": {
+        "origin": "qwen3-coder",
+        "type": "code",
+        "activation": "silu"
+      },
+      "177": {
+        "origin": "phi-4",
+        "type": "reasoning",
+        "activation": "silu"
+      }
+    }
+  },
+  "v4x_merge_info": {
+    "base_model": "NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "code_donor": "Qwen3-Coder-30B-A3B-Instruct (48 best experts)",
+    "reasoning_donor": "Phi-4 (MLP only)",
+    "method": "MoE Cross-Architecture Transport & Merge",
+    "context_extension": "YaRN 4x (262K → 1M tokens)"
+  },
+  "v4x_training": {
+    "phase_1": "Router SFT (freeze all experts, train only router)",
+    "phase_2": "Identity SFT (teach routing patterns)",
+    "phase_3": "Semantic bias initialization (optional)",
+    "phase_4": "CoT + Code SFT",
+    "phase_5": "Tool calling",
+    "phase_6": "Prompt baking",
+    "phase_7": "RL (optional)"
+  }
+}
