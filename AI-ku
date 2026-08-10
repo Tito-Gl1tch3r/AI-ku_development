@@ -1,0 +1,408 @@
+====================================================================================================
+AI-ku V4X — INSPECCIÓN DEL MODELO
+====================================================================================================
+Ruta: G:\Mi unidad\AI-ku_V4X\merged_models\Thinker-Max-V4X-Base
+Timeout por sección: 60s
+El script NO modifica los pesos.
+
+
+====================================================================================================
+SECCIÓN 1: EXISTENCIA
+====================================================================================================
+Ruta: G:\Mi unidad\AI-ku_V4X\merged_models\Thinker-Max-V4X-Base
+Existe: True
+Es directorio: True
+
+Ruta válida.
+[OK] Sección completada en 0.1s.
+====================================================================================================
+SECCIÓN 2: ARCHIVOS
+====================================================================================================
+[TIMEOUT] La sección superó 60 segundos.
+[INFO] Terminando proceso de la sección...
+[TIMEOUT] ARCHIVOS omitida tras 60.0s.
+
+====================================================================================================
+SECCIÓN 3: CONFIG.JSON
+====================================================================================================
+config.json encontrado.
+
+architectures: ['V4XForCausalLM']
+model_type: V4X
+hidden_size: 2688
+intermediate_size: 1856
+num_hidden_layers: 52
+num_attention_heads: 32
+num_key_value_heads: 2
+head_dim: 128
+vocab_size: 131072
+max_position_embeddings: 1048576
+rope_theta: 10000
+rope_scaling: {'type': 'yarn', 'factor': 4.0, 'original_max_position_embeddings': 262144, 'finetuned': False}
+torch_dtype: bfloat16
+tie_word_embeddings: False
+attention_bias: False
+sliding_window: None
+use_cache: True
+num_experts: 178
+num_experts_per_tok: 6
+moe_intermediate_size: 1856
+auto_map: {'AutoConfig': 'modeling_v4x.V4XConfig', 'AutoModelForCausalLM': 'modeling_v4x.V4XForCausalLM'}
+transformers_version: 4.55.4
+
+TODAS LAS CLAVES:
+  architectures
+  attention_bias
+  attention_dropout
+  auto_map
+  bos_token_id
+  chunk_size
+  conv_kernel
+  eos_token_id
+  expand
+  head_dim
+  hidden_dropout
+  hidden_size
+  hybrid_override_pattern
+  initializer_range
+  intermediate_size
+  layer_norm_epsilon
+  mamba_head_dim
+  mamba_hidden_act
+  mamba_num_heads
+  mamba_proj_bias
+  mamba_ssm_cache_dtype
+  max_position_embeddings
+  mlp_bias
+  mlp_hidden_act
+  model_type
+  moe_intermediate_size
+  moe_shared_expert_intermediate_size
+  n_group
+  n_groups
+  n_routed_experts
+  n_shared_experts
+  norm_eps
+  norm_topk_prob
+  num_attention_heads
+  num_experts
+  num_experts_per_tok
+  num_hidden_layers
+  num_key_value_heads
+  num_logits_to_keep
+  pad_token_id
+  partial_rotary_factor
+  rescale_prenorm_residual
+  residual_in_fp32
+  rope_scaling
+  rope_theta
+  routed_scaling_factor
+  sliding_window
+  ssm_state_size
+  tie_word_embeddings
+  time_step_floor
+  time_step_max
+  time_step_min
+  topk_group
+  torch_dtype
+  transformers_version
+  use_bias
+  use_cache
+  use_conv_bias
+  use_mamba_kernels
+  v4x_expert_config
+  v4x_merge_info
+  v4x_training
+  vocab_size
+[OK] Sección completada en 0.1s.
+
+====================================================================================================
+SECCIÓN 4: ÍNDICES DE SAFETENSORS
+====================================================================================================
+Encontrado: model.safetensors.index.json
+Claves del índice:
+  metadata
+  weight_map
+
+METADATA:
+{
+  "total_size": 71460660864
+}
+
+Pesos indexados: 10665
+Shards utilizados: 21
+  model-00001-of-00021.safetensors
+  model-00002-of-00021.safetensors
+  model-00003-of-00021.safetensors
+  model-00004-of-00021.safetensors
+  model-00005-of-00021.safetensors
+  model-00006-of-00021.safetensors
+  model-00007-of-00021.safetensors
+  model-00008-of-00021.safetensors
+  model-00009-of-00021.safetensors
+  model-00010-of-00021.safetensors
+  model-00011-of-00021.safetensors
+  model-00012-of-00021.safetensors
+  model-00013-of-00021.safetensors
+  model-00014-of-00021.safetensors
+  model-00015-of-00021.safetensors
+  model-00016-of-00021.safetensors
+  model-00017-of-00021.safetensors
+  model-00018-of-00021.safetensors
+  model-00019-of-00021.safetensors
+  model-00020-of-00021.safetensors
+  model-00021-of-00021.safetensors
+[OK] Sección completada en 0.1s.
+
+====================================================================================================
+SECCIÓN 5: SAFETENSORS
+====================================================================================================
+Shards encontrados: 22
+  model-00001-of-00021.safetensors    4.65 GB
+  model-00002-of-00021.safetensors    4.65 GB
+  model-00003-of-00021.safetensors    4.65 GB
+  model-00004-of-00021.safetensors    4.65 GB
+  model-00005-of-00021.safetensors    4.64 GB
+  model-00006-of-00021.safetensors    4.66 GB
+  model-00007-of-00021.safetensors    4.65 GB
+  model-00008-of-00021.safetensors    4.65 GB
+  model-00009-of-00021.safetensors    4.65 GB
+  model-00010-of-00021.safetensors    4.65 GB
+  model-00011-of-00021.safetensors    4.65 GB
+  model-00012-of-00021.safetensors    4.65 GB
+  model-00013-of-00021.safetensors    3.02 GB
+  model-00014-of-00021.safetensors    3.00 GB
+  model-00015-of-00021.safetensors    3.00 GB
+  model-00016-of-00021.safetensors    1.74 GB
+  model-00017-of-00021.safetensors    3.00 GB
+  model-00018-of-00021.safetensors    3.00 GB
+  model-00019-of-00021.safetensors    2.98 GB
+  model-00020-of-00021.safetensors    3.00 GB
+  model-00021-of-00021.safetensors    3.00 GB
+  v4x_trained_routers.safetensors    12.71 MB
+[OK] Sección completada en 0.1s.
+
+====================================================================================================
+SECCIÓN 6: ESTRUCTURA INTERNA DE SAFETENSORS
+====================================================================================================
+[TIMEOUT] La sección superó 60 segundos.
+[INFO] Terminando proceso de la sección...
+[TIMEOUT] ESTRUCTURA INTERNA DE SAFETENSORS omitida tras 60.0s.
+
+====================================================================================================
+SECCIÓN 7: MAPA DE COMPONENTES
+====================================================================================================
+
+EMBEDDINGS: 1
+  backbone.embeddings.weight
+
+ATTENTION: 24
+  backbone.layers.26.mixer.q_proj.weight
+  backbone.layers.33.mixer.q_proj.weight
+  backbone.layers.12.mixer.q_proj.weight
+  backbone.layers.42.mixer.v_proj.weight
+  backbone.layers.19.mixer.q_proj.weight
+  backbone.layers.12.mixer.v_proj.weight
+  backbone.layers.26.mixer.v_proj.weight
+  backbone.layers.33.mixer.o_proj.weight
+  backbone.layers.33.mixer.k_proj.weight
+  backbone.layers.5.mixer.q_proj.weight
+  backbone.layers.19.mixer.o_proj.weight
+  backbone.layers.33.mixer.v_proj.weight
+  backbone.layers.5.mixer.k_proj.weight
+  backbone.layers.42.mixer.k_proj.weight
+  backbone.layers.12.mixer.o_proj.weight
+  backbone.layers.19.mixer.v_proj.weight
+  backbone.layers.19.mixer.k_proj.weight
+  backbone.layers.42.mixer.o_proj.weight
+  backbone.layers.26.mixer.k_proj.weight
+  backbone.layers.5.mixer.v_proj.weight
+  backbone.layers.26.mixer.o_proj.weight
+  backbone.layers.42.mixer.q_proj.weight
+  backbone.layers.12.mixer.k_proj.weight
+  backbone.layers.5.mixer.o_proj.weight
+
+ROPE: 0
+
+NORMALIZATION: 76
+  backbone.layers.32.norm.weight
+  backbone.layers.25.norm.weight
+  backbone.layers.7.mixer.norm.weight
+  backbone.layers.18.mixer.norm.weight
+  backbone.layers.22.norm.weight
+  backbone.layers.11.mixer.norm.weight
+  backbone.layers.33.norm.weight
+  backbone.layers.42.norm.weight
+  backbone.layers.36.norm.weight
+  backbone.layers.47.norm.weight
+  backbone.layers.6.norm.weight
+  backbone.layers.4.mixer.norm.weight
+  backbone.layers.41.mixer.norm.weight
+  backbone.layers.19.norm.weight
+  backbone.layers.51.norm.weight
+  backbone.layers.40.norm.weight
+  backbone.layers.25.mixer.norm.weight
+  backbone.layers.23.mixer.norm.weight
+  backbone.layers.3.norm.weight
+  backbone.layers.37.mixer.norm.weight
+  backbone.layers.31.norm.weight
+  backbone.layers.50.norm.weight
+  backbone.layers.0.mixer.norm.weight
+  backbone.layers.38.norm.weight
+  backbone.layers.5.norm.weight
+  backbone.layers.16.norm.weight
+  backbone.layers.30.mixer.norm.weight
+  backbone.layers.20.norm.weight
+  backbone.layers.14.mixer.norm.weight
+  backbone.layers.37.norm.weight
+  ... 46 más
+
+MLP: 10321
+  backbone.layers.15.mixer.experts.62.down_proj.weight
+  backbone.layers.3.mixer.experts.14.down_proj.weight
+  backbone.layers.47.mixer.experts.116.up_proj.weight
+  backbone.layers.8.mixer.experts.73.up_proj.weight
+  backbone.layers.38.mixer.experts.108.down_proj.weight
+  backbone.layers.8.mixer.experts.20.down_proj.weight
+  backbone.layers.47.mixer.experts.0.up_proj.weight
+  backbone.layers.34.mixer.experts.127.up_proj.weight
+  backbone.layers.45.mixer.experts.33.up_proj.weight
+  backbone.layers.22.mixer.experts.14.up_proj.weight
+  backbone.layers.24.mixer.experts.27.down_proj.weight
+  backbone.layers.1.mixer.experts.12.up_proj.weight
+  backbone.layers.3.mixer.experts.87.up_proj.weight
+  backbone.layers.31.mixer.experts.16.down_proj.weight
+  backbone.layers.20.mixer.experts.105.down_proj.weight
+  backbone.layers.3.mixer.experts.94.up_proj.weight
+  backbone.layers.24.mixer.experts.35.up_proj.weight
+  backbone.layers.49.mixer.experts.3.down_proj.weight
+  backbone.layers.22.mixer.experts.109.down_proj.weight
+  backbone.layers.22.mixer.experts.44.down_proj.weight
+  backbone.layers.6.mixer.experts.104.up_proj.weight
+  backbone.layers.31.mixer.experts.51.down_proj.weight
+  backbone.layers.36.mixer.experts.81.down_proj.weight
+  backbone.layers.1.mixer.experts.14.down_proj.weight
+  backbone.layers.8.mixer.experts.94.up_proj.weight
+  backbone.layers.15.mixer.experts.3.up_proj.weight
+  backbone.layers.36.mixer.experts.67.up_proj.weight
+  backbone.layers.31.mixer.experts.124.down_proj.weight
+  backbone.layers.8.mixer.experts.67.up_proj.weight
+  backbone.layers.31.mixer.experts.62.down_proj.weight
+  ... 10291 más
+
+MOE: 10356
+  backbone.layers.15.mixer.experts.62.down_proj.weight
+  backbone.layers.3.mixer.experts.14.down_proj.weight
+  backbone.layers.47.mixer.experts.116.up_proj.weight
+  backbone.layers.8.mixer.experts.73.up_proj.weight
+  backbone.layers.38.mixer.experts.108.down_proj.weight
+  backbone.layers.8.mixer.experts.20.down_proj.weight
+  backbone.layers.47.mixer.experts.0.up_proj.weight
+  backbone.layers.34.mixer.experts.127.up_proj.weight
+  backbone.layers.45.mixer.experts.33.up_proj.weight
+  backbone.layers.22.mixer.experts.14.up_proj.weight
+  backbone.layers.24.mixer.experts.27.down_proj.weight
+  backbone.layers.1.mixer.experts.12.up_proj.weight
+  backbone.layers.3.mixer.experts.87.up_proj.weight
+  backbone.layers.31.mixer.experts.16.down_proj.weight
+  backbone.layers.20.mixer.experts.105.down_proj.weight
+  backbone.layers.3.mixer.experts.94.up_proj.weight
+  backbone.layers.24.mixer.experts.35.up_proj.weight
+  backbone.layers.49.mixer.experts.3.down_proj.weight
+  backbone.layers.22.mixer.experts.109.down_proj.weight
+  backbone.layers.22.mixer.experts.44.down_proj.weight
+  backbone.layers.6.mixer.experts.104.up_proj.weight
+  backbone.layers.31.mixer.experts.51.down_proj.weight
+  backbone.layers.36.mixer.experts.81.down_proj.weight
+  backbone.layers.1.mixer.experts.14.down_proj.weight
+  backbone.layers.8.mixer.experts.94.up_proj.weight
+  backbone.layers.15.mixer.experts.3.up_proj.weight
+  backbone.layers.36.mixer.experts.67.up_proj.weight
+  backbone.layers.31.mixer.experts.124.down_proj.weight
+  backbone.layers.8.mixer.experts.67.up_proj.weight
+  backbone.layers.31.mixer.experts.62.down_proj.weight
+  ... 10326 más
+
+LM_HEAD: 1
+  lm_head.weight
+
+VISION: 0
+
+AUDIO: 0
+
+VIDEO: 0
+[OK] Sección completada en 0.2s.
+
+====================================================================================================
+SECCIÓN 8: DETECCIÓN DE CAPAS
+====================================================================================================
+Primera capa: 0
+Última capa: 51
+Cantidad detectada: 52
+Índices: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
+[OK] Sección completada en 0.1s.
+
+====================================================================================================
+SECCIÓN 9: PYTHON CUSTOM / REMOTE CODE
+====================================================================================================
+[TIMEOUT] La sección superó 60 segundos.
+[INFO] Terminando proceso de la sección...
+[TIMEOUT] PYTHON CUSTOM / REMOTE CODE omitida tras 60.0s.
+
+====================================================================================================
+SECCIÓN 10: TOKENIZER
+====================================================================================================
+tokenizer.json: 16.29 MB
+  keys: added_tokens, decoder, model, normalizer, padding, post_processor, pre_tokenizer, truncation, version
+tokenizer_config.json: 183.88 KB
+  keys: add_bos_token, add_eos_token, add_prefix_space, added_tokens_decoder, additional_special_tokens, bos_token, chat_template, clean_up_tokenization_spaces, eos_token, extra_special_tokens, model_input_names, model_max_length, tokenizer_class, unk_token
+special_tokens_map.json: 420 B
+  keys: bos_token, eos_token, unk_token
+[OK] Sección completada en 9.1s.
+
+====================================================================================================
+SECCIÓN 11: TRANSFORMERS
+====================================================================================================
+[transformers] V4XConfig got `key=rope_scaling` in kwargs but hasn't set it as attribute. For RoPE standardization you need to set `self.rope_parameters` in model's config.
+Transformers instalado: 5.13.1
+AutoConfig no pudo cargar el modelo: 'V4XConfig' object has no attribute 'max_position_embeddings'
+[OK] Sección completada en 15.4s.
+
+====================================================================================================
+SECCIÓN 12: ANÁLISIS FORWARD + ROUTER
+====================================================================================================
+DATOS RELEVANTES PARA FORWARD:
+model_type: V4X
+architectures: ['V4XForCausalLM']
+hidden_size: 2688
+intermediate_size: 1856
+num_hidden_layers: 52
+num_attention_heads: 32
+num_key_value_heads: 2
+head_dim: 128
+vocab_size: 131072
+max_position_embeddings: 1048576
+rope_theta: 10000
+rope_scaling: {'type': 'yarn', 'factor': 4.0, 'original_max_position_embeddings': 262144, 'finetuned': False}
+torch_dtype: bfloat16
+tie_word_embeddings: False
+use_cache: True
+
+DATOS RELEVANTES PARA ROUTER / MOE:
+num_experts: 178
+num_experts_per_tok: 6
+moe_intermediate_size: 1856
+
+CONCLUSIÓN AUTOMÁTICA:
+Arquitectura declarada: ['V4XForCausalLM']
+Tipo de modelo: V4X
+Parece existir una estructura MoE/experts que debe investigarse antes de diseñar el Router.
+[OK] Sección completada en 0.1s.
+
+====================================================================================================
+FIN DE INSPECCIÓN
+====================================================================================================
+
+Informe guardado en: C:\Users\Manuel\Desktop\aiku_inspection.txt
+
+✓ INSPECCIÓN COMPLETADA
