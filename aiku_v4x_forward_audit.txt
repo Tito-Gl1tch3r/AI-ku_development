@@ -9,35 +9,100 @@ Analiza exclusivamente código fuente + config.json.
 ========================================================================================================================
 1. COMPROBACIÓN DE ARCHIVOS
 ========================================================================================================================
-CONFIG               | FALTA | G:\Mi unidad\AI-ku_V4X\configuration_v4x.py
-FORWARD              | FALTA | G:\Mi unidad\AI-ku_V4X\modeling_v4x.py
-NEMOTRON             | FALTA | G:\Mi unidad\AI-ku_V4X\modeling_nemotron_h.py
-CONFIG_NEMOTRON      | FALTA | G:\Mi unidad\AI-ku_V4X\configuration_nemotron_h.py
-JSON                 | FALTA | G:\Mi unidad\AI-ku_V4X\config.json
+CONFIG               | FALTA | G:\Mi unidad\AI-ku_V4X\merged_models\Thinker-Max-V4X-Base\configuration_v4x.py
+FORWARD              | OK | G:\Mi unidad\AI-ku_V4X\merged_models\Thinker-Max-V4X-Base\modeling_v4x.py
+NEMOTRON             | OK | G:\Mi unidad\AI-ku_V4X\merged_models\Thinker-Max-V4X-Base\modeling_nemotron_h.py
+CONFIG_NEMOTRON      | OK | G:\Mi unidad\AI-ku_V4X\merged_models\Thinker-Max-V4X-Base\configuration_nemotron_h.py
+JSON                 | OK | G:\Mi unidad\AI-ku_V4X\merged_models\Thinker-Max-V4X-Base\config.json
 
 ========================================================================================================================
 2. CONFIG.JSON — MAPA DE EXPERTOS
 ========================================================================================================================
+model_type: V4X
+architectures: ['V4XForCausalLM']
+num_hidden_layers: 52
+hidden_size: 2688
+num_experts: 178
+num_experts_per_tok: 6
+
+CLAVES RELACIONADAS CON EXPERTOS:
+  moe_intermediate_size: 1856
+  moe_shared_expert_intermediate_size: 3712
+  n_routed_experts: 128
+  n_shared_experts: 1
+  num_experts: 178
+  num_experts_per_tok: 6
+  v4x_expert_config: {'num_base_experts': 128, 'num_shared_experts': 1, 'num_qwen_experts': 48, 'num_phi_experts': 1, 'total_experts': 178, 'expert_map': {'0-127': {'origin': 'nemotron', 'type': 'general', 'activation': 'relu2'}, '128': {'origin': 'nemotron', 'type': 'shared', 'activation': 'relu2'}, '129-176': {'origin': 'qwen3-coder', 'type': 'code', 'activation': 'silu'}, '177': {'origin': 'phi-4', 'type': 'reasoning', 'activation': 'silu'}}}
 
 ========================================================================================================================
 3. ESTRUCTURA DE MODELING_V4X
 ========================================================================================================================
+CLASSES:
+  V4XConfig
+  NemotronExpert
+  NewExpert
+  V4XRouter
+  V4XMoEBlock
+  V4XForCausalLM
+
+FUNCTIONS / METHODS:
+  __init__
+  __init__
+  forward
+  __init__
+  forward
+  __init__
+  forward
+  __init__
+  forward
+  __init__
+  get_expert_metadata
+  get_trainable_params_for_router_sft
+  init_router_with_semantic_bias
 
 ========================================================================================================================
 4. MÉTODOS FORWARD
 ========================================================================================================================
 
+METHOD: forward
+LINE: 70
+ARGS: self, x
+
+METHOD: forward
+LINE: 82
+ARGS: self, x
+
+METHOD: forward
+LINE: 115
+ARGS: self, hidden_states
+
+METHOD: forward
+LINE: 183
+ARGS: self, hidden_states
+
+METHOD: get_expert_metadata
+LINE: 271
+ARGS: cls
+
+METHOD: get_trainable_params_for_router_sft
+LINE: 281
+ARGS: cls, model
+
+METHOD: init_router_with_semantic_bias
+LINE: 303
+ARGS: cls, model, tokenizer, code_keywords, reasoning_keywords
+
 ========================================================================================================================
 5. ROUTER — ANÁLISIS DE CÓDIGO
 ========================================================================================================================
-router                    → 0 coincidencias
-routing                   → 0 coincidencias
-top_k                     → 0 coincidencias
-topk                      → 0 coincidencias
-num_experts               → 0 coincidencias
-experts_per_tok           → 0 coincidencias
-softmax                   → 0 coincidencias
-topk(                     → 0 coincidencias
+router                    → 25 coincidencias
+routing                   → 1 coincidencias
+top_k                     → 8 coincidencias
+topk                      → 1 coincidencias
+num_experts               → 6 coincidencias
+experts_per_tok           → 4 coincidencias
+softmax                   → 1 coincidencias
+topk(                     → 1 coincidencias
 argmax                    → 0 coincidencias
 expert_weights            → 0 coincidencias
 expert_indices            → 0 coincidencias
@@ -46,86 +111,2088 @@ expert_indices            → 0 coincidencias
 6. ROUTER — CONTEXTO
 ========================================================================================================================
 
+--- línea aproximada 12 ---
+ (Mamba + MoE híbrido) con expertos externos
+de Qwen3-Coder y Phi-4.
+
+Estructura por capa MoE:
+  - 128 expertos base Nemotron (up_proj + down_proj, relu2)
+  - 1 shared expert Nemotron (up_proj + down_proj)
+  - 48 expertos Qwen colapsados (gate_proj + up_proj + down_proj, silu)
+  - 1 experto Phi colapsado (gate_proj + up_proj + down_proj, silu)
+  - Router original Nemotron (128 expertos base)
+  - Router V4X (178 expertos = 128 base + 48 Qwen + 1 Phi + 1 shared)
+
+El forward:
+  1. Nemotron procesa normalmente (Mamba/Attention + MoE base)
+  2. En capas MoE, el router V4X decide si activar expertos externos
+  3. La salida de los expertos externos se suma a la del MoE base
+"""
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from transformers import PreTrainedModel, PretrainedConfig
+from typing import Optional, Tuple
+import math
+
+
+c
+
+--- línea aproximada 13 ---
+wen3-Coder y Phi-4.
+
+Estructura por capa MoE:
+  - 128 expertos base Nemotron (up_proj + down_proj, relu2)
+  - 1 shared expert Nemotron (up_proj + down_proj)
+  - 48 expertos Qwen colapsados (gate_proj + up_proj + down_proj, silu)
+  - 1 experto Phi colapsado (gate_proj + up_proj + down_proj, silu)
+  - Router original Nemotron (128 expertos base)
+  - Router V4X (178 expertos = 128 base + 48 Qwen + 1 Phi + 1 shared)
+
+El forward:
+  1. Nemotron procesa normalmente (Mamba/Attention + MoE base)
+  2. En capas MoE, el router V4X decide si activar expertos externos
+  3. La salida de los expertos externos se suma a la del MoE base
+"""
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from transformers import PreTrainedModel, PretrainedConfig
+from typing import Optional, Tuple
+import math
+
+
+class V4XConfig(PretrainedConfig):
+    model_type 
+
+--- línea aproximada 17 ---
+expertos Qwen colapsados (gate_proj + up_proj + down_proj, silu)
+  - 1 experto Phi colapsado (gate_proj + up_proj + down_proj, silu)
+  - Router original Nemotron (128 expertos base)
+  - Router V4X (178 expertos = 128 base + 48 Qwen + 1 Phi + 1 shared)
+
+El forward:
+  1. Nemotron procesa normalmente (Mamba/Attention + MoE base)
+  2. En capas MoE, el router V4X decide si activar expertos externos
+  3. La salida de los expertos externos se suma a la del MoE base
+"""
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from transformers import PreTrainedModel, PretrainedConfig
+from typing import Optional, Tuple
+import math
+
+
+class V4XConfig(PretrainedConfig):
+    model_type = "V4X"
+
+    def __init__(
+        self,
+        hidden_size=2688,
+        num_hidden_layers=52,
+        num_base_experts=128,
+        num_shared_experts=1,
+       
+
+--- línea aproximada 87 ---
+ate_size, bias=False)
+        self.up_proj = nn.Linear(hidden_size, intermediate_size, bias=False)
+        self.down_proj = nn.Linear(intermediate_size, hidden_size, bias=False)
+
+    def forward(self, x):
+        return self.down_proj(F.silu(self.gate_proj(x)) * self.up_proj(x))
+
+
+# ═══════════════════════════════════════════════════════════════
+# ROUTER V4X
+# ═══════════════════════════════════════════════════════════════
+
+class V4XRouter(nn.Module):
+    """
+    Router unificado para todos los expertos.
+
+    Fase 1: Top-K basado en logits puros (agnóstico).
+    Fase 2: El SFT entrena el router para que aprenda qué experto usar.
+    Fase 3: Bias inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+
+
+--- línea aproximada 90 ---
+bias=False)
+        self.down_proj = nn.Linear(intermediate_size, hidden_size, bias=False)
+
+    def forward(self, x):
+        return self.down_proj(F.silu(self.gate_proj(x)) * self.up_proj(x))
+
+
+# ═══════════════════════════════════════════════════════════════
+# ROUTER V4X
+# ═══════════════════════════════════════════════════════════════
+
+class V4XRouter(nn.Module):
+    """
+    Router unificado para todos los expertos.
+
+    Fase 1: Top-K basado en logits puros (agnóstico).
+    Fase 2: El SFT entrena el router para que aprenda qué experto usar.
+    Fase 3: Bias inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+        self.top_k = top_k
+        self.num_total_experts = num_total_experts
+        s
+
+--- línea aproximada 92 ---
+roj = nn.Linear(intermediate_size, hidden_size, bias=False)
+
+    def forward(self, x):
+        return self.down_proj(F.silu(self.gate_proj(x)) * self.up_proj(x))
+
+
+# ═══════════════════════════════════════════════════════════════
+# ROUTER V4X
+# ═══════════════════════════════════════════════════════════════
+
+class V4XRouter(nn.Module):
+    """
+    Router unificado para todos los expertos.
+
+    Fase 1: Top-K basado en logits puros (agnóstico).
+    Fase 2: El SFT entrena el router para que aprenda qué experto usar.
+    Fase 3: Bias inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+        self.top_k = top_k
+        self.num_total_experts = num_total_experts
+        self.num_base_experts = num_base
+
+--- línea aproximada 95 ---
+f.gate_proj(x)) * self.up_proj(x))
+
+
+# ═══════════════════════════════════════════════════════════════
+# ROUTER V4X
+# ═══════════════════════════════════════════════════════════════
+
+class V4XRouter(nn.Module):
+    """
+    Router unificado para todos los expertos.
+
+    Fase 1: Top-K basado en logits puros (agnóstico).
+    Fase 2: El SFT entrena el router para que aprenda qué experto usar.
+    Fase 3: Bias inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+        self.top_k = top_k
+        self.num_total_experts = num_total_experts
+        self.num_base_experts = num_base_experts
+
+        # Pesos del router (entrenable)
+        self.weight = nn.Linear(hidden_size, num_total_experts, bias=False)
+
+
+
+--- línea aproximada 98 ---
+═══════════════════
+
+class V4XRouter(nn.Module):
+    """
+    Router unificado para todos los expertos.
+
+    Fase 1: Top-K basado en logits puros (agnóstico).
+    Fase 2: El SFT entrena el router para que aprenda qué experto usar.
+    Fase 3: Bias inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+        self.top_k = top_k
+        self.num_total_experts = num_total_experts
+        self.num_base_experts = num_base_experts
+
+        # Pesos del router (entrenable)
+        self.weight = nn.Linear(hidden_size, num_total_experts, bias=False)
+
+        # Bias de corrección (como el e_score_correction_bias de Nemotron)
+        if e_score_correction:
+            self.e_score_correction_bias = nn.Parameter
+
+--- línea aproximada 101 ---
+ 1: Top-K basado en logits puros (agnóstico).
+    Fase 2: El SFT entrena el router para que aprenda qué experto usar.
+    Fase 3: Bias inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+        self.top_k = top_k
+        self.num_total_experts = num_total_experts
+        self.num_base_experts = num_base_experts
+
+        # Pesos del router (entrenable)
+        self.weight = nn.Linear(hidden_size, num_total_experts, bias=False)
+
+        # Bias de corrección (como el e_score_correction_bias de Nemotron)
+        if e_score_correction:
+            self.e_score_correction_bias = nn.Parameter(
+                torch.zeros(num_total_experts))
+        else:
+            self.e_score_correction_bias = None
+
+
+--- línea aproximada 101 ---
+K basado en logits puros (agnóstico).
+    Fase 2: El SFT entrena el router para que aprenda qué experto usar.
+    Fase 3: Bias inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+        self.top_k = top_k
+        self.num_total_experts = num_total_experts
+        self.num_base_experts = num_base_experts
+
+        # Pesos del router (entrenable)
+        self.weight = nn.Linear(hidden_size, num_total_experts, bias=False)
+
+        # Bias de corrección (como el e_score_correction_bias de Nemotron)
+        if e_score_correction:
+            self.e_score_correction_bias = nn.Parameter(
+                torch.zeros(num_total_experts))
+        else:
+            self.e_score_correction_bias = None
+
+    def
+
+--- línea aproximada 105 ---
+inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+        self.top_k = top_k
+        self.num_total_experts = num_total_experts
+        self.num_base_experts = num_base_experts
+
+        # Pesos del router (entrenable)
+        self.weight = nn.Linear(hidden_size, num_total_experts, bias=False)
+
+        # Bias de corrección (como el e_score_correction_bias de Nemotron)
+        if e_score_correction:
+            self.e_score_correction_bias = nn.Parameter(
+                torch.zeros(num_total_experts))
+        else:
+            self.e_score_correction_bias = None
+
+    def forward(self, hidden_states):
+        """
+        Args:
+            hidden_states: (batch * seq_len, hidden_size)
+        Retur
+
+--- línea aproximada 120 ---
+on:
+            self.e_score_correction_bias = nn.Parameter(
+                torch.zeros(num_total_experts))
+        else:
+            self.e_score_correction_bias = None
+
+    def forward(self, hidden_states):
+        """
+        Args:
+            hidden_states: (batch * seq_len, hidden_size)
+        Returns:
+            weights: (batch * seq_len, top_k) - pesos normalizados
+            indices: (batch * seq_len, top_k) - índices de expertos
+        """
+        logits = self.weight(hidden_states)  # (tokens, num_experts)
+
+        # Aplicar corrección de bias si existe
+        if self.e_score_correction_bias is not None:
+            logits = logits + self.e_score_correction_bias
+
+        # Top-K selección
+        weights, indices = torch.topk(logits, self.top_k, dim=-1)
+        weights = F.softmax(weights, dim=-1, dtype=torch.float32).to(hidden
+
+--- línea aproximada 121 ---
+          torch.zeros(num_total_experts))
+        else:
+            self.e_score_correction_bias = None
+
+    def forward(self, hidden_states):
+        """
+        Args:
+            hidden_states: (batch * seq_len, hidden_size)
+        Returns:
+            weights: (batch * seq_len, top_k) - pesos normalizados
+            indices: (batch * seq_len, top_k) - índices de expertos
+        """
+        logits = self.weight(hidden_states)  # (tokens, num_experts)
+
+        # Aplicar corrección de bias si existe
+        if self.e_score_correction_bias is not None:
+            logits = logits + self.e_score_correction_bias
+
+        # Top-K selección
+        weights, indices = torch.topk(logits, self.top_k, dim=-1)
+        weights = F.softmax(weights, dim=-1, dtype=torch.float32).to(hidden_states.dtype)
+
+        return weights, indices
+
+
+# ═══════════════
+
+--- línea aproximada 130 ---
+: (batch * seq_len, top_k) - índices de expertos
+        """
+        logits = self.weight(hidden_states)  # (tokens, num_experts)
+
+        # Aplicar corrección de bias si existe
+        if self.e_score_correction_bias is not None:
+            logits = logits + self.e_score_correction_bias
+
+        # Top-K selección
+        weights, indices = torch.topk(logits, self.top_k, dim=-1)
+        weights = F.softmax(weights, dim=-1, dtype=torch.float32).to(hidden_states.dtype)
+
+        return weights, indices
+
+
+# ═══════════════════════════════════════════════════════════════
+# BLOQUE MOE V4X
+# ═══════════════════════════════════════════════════════════════
+
+class V4XMoEBlock(nn.Module):
+    """
+    Bloque MoE que combina expertos base de Nemotron + externos.
+
+    Expertos 0-127: Nemotron base (up+down, relu2)
+    Experto 128: Shared expert Nemotron (
+
+--- línea aproximada 130 ---
+, top_k) - índices de expertos
+        """
+        logits = self.weight(hidden_states)  # (tokens, num_experts)
+
+        # Aplicar corrección de bias si existe
+        if self.e_score_correction_bias is not None:
+            logits = logits + self.e_score_correction_bias
+
+        # Top-K selección
+        weights, indices = torch.topk(logits, self.top_k, dim=-1)
+        weights = F.softmax(weights, dim=-1, dtype=torch.float32).to(hidden_states.dtype)
+
+        return weights, indices
+
+
+# ═══════════════════════════════════════════════════════════════
+# BLOQUE MOE V4X
+# ═══════════════════════════════════════════════════════════════
+
+class V4XMoEBlock(nn.Module):
+    """
+    Bloque MoE que combina expertos base de Nemotron + externos.
+
+    Expertos 0-127: Nemotron base (up+down, relu2)
+    Experto 128: Shared expert Nemotron (siempre activo)
+   
+
+--- línea aproximada 171 ---
+        self.shared_experts = NemotronExpert(
+            config.hidden_size, config.shared_intermediate_size)
+
+        # Expertos nuevos: Qwen (48) + Phi (1)
+        self.new_experts = nn.ModuleList([
+            NewExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.total_new_experts)
+        ])
+
+        # Router V4X unificado
+        total_routed = config.num_base_experts + config.total_new_experts
+        self.v4x_router = V4XRouter(
+            config.hidden_size,
+            total_routed,
+            config.num_experts_per_tok,
+            config.num_base_experts
+        )
+
+        # Gate original de Nemotron (se mantiene para compatibilidad)
+        self.gate = None  # Se carga desde los pesos
+
+    def forward(self, hidden_states):
+        """
+        Args:
+            hidden_states: (batch, seq_le
+
+--- línea aproximada 173 ---
+        # Expertos nuevos: Qwen (48) + Phi (1)
+        self.new_experts = nn.ModuleList([
+            NewExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.total_new_experts)
+        ])
+
+        # Router V4X unificado
+        total_routed = config.num_base_experts + config.total_new_experts
+        self.v4x_router = V4XRouter(
+            config.hidden_size,
+            total_routed,
+            config.num_experts_per_tok,
+            config.num_base_experts
+        )
+
+        # Gate original de Nemotron (se mantiene para compatibilidad)
+        self.gate = None  # Se carga desde los pesos
+
+    def forward(self, hidden_states):
+        """
+        Args:
+            hidden_states: (batch, seq_len, hidden_size)
+        Returns:
+            output: (batch, seq_len, hidden_size)
+        """
+        batch_siz
+
+--- línea aproximada 173 ---
+pertos nuevos: Qwen (48) + Phi (1)
+        self.new_experts = nn.ModuleList([
+            NewExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.total_new_experts)
+        ])
+
+        # Router V4X unificado
+        total_routed = config.num_base_experts + config.total_new_experts
+        self.v4x_router = V4XRouter(
+            config.hidden_size,
+            total_routed,
+            config.num_experts_per_tok,
+            config.num_base_experts
+        )
+
+        # Gate original de Nemotron (se mantiene para compatibilidad)
+        self.gate = None  # Se carga desde los pesos
+
+    def forward(self, hidden_states):
+        """
+        Args:
+            hidden_states: (batch, seq_len, hidden_size)
+        Returns:
+            output: (batch, seq_len, hidden_size)
+        """
+        batch_size, seq_len, 
+
+--- línea aproximada 197 ---
+  Returns:
+            output: (batch, seq_len, hidden_size)
+        """
+        batch_size, seq_len, hidden_dim = hidden_states.shape
+        hidden_flat = hidden_states.view(-1, hidden_dim)
+        num_tokens = hidden_flat.shape[0]
+
+        # 1. Shared expert (siempre activo)
+        shared_output = self.shared_experts(hidden_flat)
+
+        # 2. Router V4X: seleccionar top-K expertos
+        weights, indices = self.v4x_router(hidden_flat)
+        # weights: (num_tokens, top_k)
+        # indices: (num_tokens, top_k)
+
+        # 3. Ejecutar expertos seleccionados
+        routed_output = torch.zeros_like(hidden_flat)
+
+        # Expertos base Nemotron (0 a num_base-1)
+        for expert_idx in range(self.config.num_base_experts):
+            # Máscara: qué tokens activan este experto
+            mask = (indices == expert_idx).any(dim=-1)  # (num_t
+
+--- línea aproximada 198 ---
+      batch_size, seq_len, hidden_dim = hidden_states.shape
+        hidden_flat = hidden_states.view(-1, hidden_dim)
+        num_tokens = hidden_flat.shape[0]
+
+        # 1. Shared expert (siempre activo)
+        shared_output = self.shared_experts(hidden_flat)
+
+        # 2. Router V4X: seleccionar top-K expertos
+        weights, indices = self.v4x_router(hidden_flat)
+        # weights: (num_tokens, top_k)
+        # indices: (num_tokens, top_k)
+
+        # 3. Ejecutar expertos seleccionados
+        routed_output = torch.zeros_like(hidden_flat)
+
+        # Expertos base Nemotron (0 a num_base-1)
+        for expert_idx in range(self.config.num_base_experts):
+            # Máscara: qué tokens activan este experto
+            mask = (indices == expert_idx).any(dim=-1)  # (num_tokens,)
+            if not mask.any():
+                continue
+
+          
+
+--- línea aproximada 199 ---
+s.shape
+        hidden_flat = hidden_states.view(-1, hidden_dim)
+        num_tokens = hidden_flat.shape[0]
+
+        # 1. Shared expert (siempre activo)
+        shared_output = self.shared_experts(hidden_flat)
+
+        # 2. Router V4X: seleccionar top-K expertos
+        weights, indices = self.v4x_router(hidden_flat)
+        # weights: (num_tokens, top_k)
+        # indices: (num_tokens, top_k)
+
+        # 3. Ejecutar expertos seleccionados
+        routed_output = torch.zeros_like(hidden_flat)
+
+        # Expertos base Nemotron (0 a num_base-1)
+        for expert_idx in range(self.config.num_base_experts):
+            # Máscara: qué tokens activan este experto
+            mask = (indices == expert_idx).any(dim=-1)  # (num_tokens,)
+            if not mask.any():
+                continue
+
+            token_indices = mask.nonzero(as_tuple=True)[0]
+  
+
+--- línea aproximada 200 ---
+ates.view(-1, hidden_dim)
+        num_tokens = hidden_flat.shape[0]
+
+        # 1. Shared expert (siempre activo)
+        shared_output = self.shared_experts(hidden_flat)
+
+        # 2. Router V4X: seleccionar top-K expertos
+        weights, indices = self.v4x_router(hidden_flat)
+        # weights: (num_tokens, top_k)
+        # indices: (num_tokens, top_k)
+
+        # 3. Ejecutar expertos seleccionados
+        routed_output = torch.zeros_like(hidden_flat)
+
+        # Expertos base Nemotron (0 a num_base-1)
+        for expert_idx in range(self.config.num_base_experts):
+            # Máscara: qué tokens activan este experto
+            mask = (indices == expert_idx).any(dim=-1)  # (num_tokens,)
+            if not mask.any():
+                continue
+
+            token_indices = mask.nonzero(as_tuple=True)[0]
+            expert_input = hidden_flat[to
+
+--- línea aproximada 261 ---
+══════════════
+
+class V4XForCausalLM(PreTrainedModel):
+    """
+    AI-ku Thinker-Max V4X.
+
+    El modelo base es Nemotron-H (cargado desde los pesos backbone.*).
+    Los expertos nuevos se cargan desde backbone.layers.X.mixer.new_experts.*.
+
+    Para inferencia real, usar llama.cpp con el GGUF convertido.
+    Este forward es para entrenamiento del router con transformers/PEFT.
+    """
+    config_class = V4XConfig
+    _no_split_modules = ["V4XMoEBlock"]
+
+    def __init__(self, config: V4XConfig):
+        super().__init__(config)
+        self.config = config
+
+    @classmethod
+    def get_expert_metadata(cls):
+        """Metadatos de expertos para logging/debugging. NO afectan al routing."""
+        return {
+            "0-127": {"origin": "nemotron", "type": "general", "activation": "relu2"},
+            "128": {"origin": "nemotron", "type": "sha
+
+--- línea aproximada 281 ---
+general", "activation": "relu2"},
+            "128": {"origin": "nemotron", "type": "shared", "activation": "relu2"},
+            "129-176": {"origin": "qwen3-coder", "type": "code", "activation": "silu"},
+            "177": {"origin": "phi-4", "type": "reasoning", "activation": "silu"},
+        }
+
+    @classmethod
+    def get_trainable_params_for_router_sft(cls, model):
+        """
+        Devuelve solo los parámetros del router para Fase 1/2 del SFT.
+        Congela todo lo demás (expertos, atención, embeddings).
+
+        Uso:
+            params = V4XForCausalLM.get_trainable_params_for_router_sft(model)
+            optimizer = torch.optim.AdamW(params, lr=1e-4)
+        """
+        trainable = []
+        frozen = 0
+        for name, param in model.named_parameters():
+            if "v4x_router" in name or "e_score_correction" in name:
+       
+
+--- línea aproximada 283 ---
+type": "shared", "activation": "relu2"},
+            "129-176": {"origin": "qwen3-coder", "type": "code", "activation": "silu"},
+            "177": {"origin": "phi-4", "type": "reasoning", "activation": "silu"},
+        }
+
+    @classmethod
+    def get_trainable_params_for_router_sft(cls, model):
+        """
+        Devuelve solo los parámetros del router para Fase 1/2 del SFT.
+        Congela todo lo demás (expertos, atención, embeddings).
+
+        Uso:
+            params = V4XForCausalLM.get_trainable_params_for_router_sft(model)
+            optimizer = torch.optim.AdamW(params, lr=1e-4)
+        """
+        trainable = []
+        frozen = 0
+        for name, param in model.named_parameters():
+            if "v4x_router" in name or "e_score_correction" in name:
+                param.requires_grad = True
+                trainable.append(param)
+ 
+
+--- línea aproximada 287 ---
+type": "reasoning", "activation": "silu"},
+        }
+
+    @classmethod
+    def get_trainable_params_for_router_sft(cls, model):
+        """
+        Devuelve solo los parámetros del router para Fase 1/2 del SFT.
+        Congela todo lo demás (expertos, atención, embeddings).
+
+        Uso:
+            params = V4XForCausalLM.get_trainable_params_for_router_sft(model)
+            optimizer = torch.optim.AdamW(params, lr=1e-4)
+        """
+        trainable = []
+        frozen = 0
+        for name, param in model.named_parameters():
+            if "v4x_router" in name or "e_score_correction" in name:
+                param.requires_grad = True
+                trainable.append(param)
+            else:
+                param.requires_grad = False
+                frozen += 1
+        print(f"V4X Router SFT: {len(trainable)} params entrenables, {frozen} co
+
+--- línea aproximada 293 ---
+l SFT.
+        Congela todo lo demás (expertos, atención, embeddings).
+
+        Uso:
+            params = V4XForCausalLM.get_trainable_params_for_router_sft(model)
+            optimizer = torch.optim.AdamW(params, lr=1e-4)
+        """
+        trainable = []
+        frozen = 0
+        for name, param in model.named_parameters():
+            if "v4x_router" in name or "e_score_correction" in name:
+                param.requires_grad = True
+                trainable.append(param)
+            else:
+                param.requires_grad = False
+                frozen += 1
+        print(f"V4X Router SFT: {len(trainable)} params entrenables, {frozen} congelados")
+        return trainable
+
+    @classmethod
+    def init_router_with_semantic_bias(cls, model, tokenizer=None,
+                                       code_keywords=None, reasoning_keywords=None)
+
+--- línea aproximada 299 ---
+ trainable = []
+        frozen = 0
+        for name, param in model.named_parameters():
+            if "v4x_router" in name or "e_score_correction" in name:
+                param.requires_grad = True
+                trainable.append(param)
+            else:
+                param.requires_grad = False
+                frozen += 1
+        print(f"V4X Router SFT: {len(trainable)} params entrenables, {frozen} congelados")
+        return trainable
+
+    @classmethod
+    def init_router_with_semantic_bias(cls, model, tokenizer=None,
+                                       code_keywords=None, reasoning_keywords=None):
+        """
+        Fase 3: Inicializa el router con bias semántico suave.
+
+        Las filas del router para expertos Qwen se sesgan hacia tokens de código.
+        Las filas del router para Phi se sesgan hacia tokens de razonamiento.
+
+   
+
+--- línea aproximada 303 ---
+"e_score_correction" in name:
+                param.requires_grad = True
+                trainable.append(param)
+            else:
+                param.requires_grad = False
+                frozen += 1
+        print(f"V4X Router SFT: {len(trainable)} params entrenables, {frozen} congelados")
+        return trainable
+
+    @classmethod
+    def init_router_with_semantic_bias(cls, model, tokenizer=None,
+                                       code_keywords=None, reasoning_keywords=None):
+        """
+        Fase 3: Inicializa el router con bias semántico suave.
+
+        Las filas del router para expertos Qwen se sesgan hacia tokens de código.
+        Las filas del router para Phi se sesgan hacia tokens de razonamiento.
+
+        Esto es SOLO inicialización. El entrenamiento ajustará los pesos.
+        """
+        if code_keywords is None:
+          
+
+--- línea aproximada 306 ---
+          frozen += 1
+        print(f"V4X Router SFT: {len(trainable)} params entrenables, {frozen} congelados")
+        return trainable
+
+    @classmethod
+    def init_router_with_semantic_bias(cls, model, tokenizer=None,
+                                       code_keywords=None, reasoning_keywords=None):
+        """
+        Fase 3: Inicializa el router con bias semántico suave.
+
+        Las filas del router para expertos Qwen se sesgan hacia tokens de código.
+        Las filas del router para Phi se sesgan hacia tokens de razonamiento.
+
+        Esto es SOLO inicialización. El entrenamiento ajustará los pesos.
+        """
+        if code_keywords is None:
+            code_keywords = [
+                "python", "function", "class", "import", "def", "return",
+                "code", "script", "variable", "loop", "array", "debug",
+               
+
+--- línea aproximada 308 ---
+en(trainable)} params entrenables, {frozen} congelados")
+        return trainable
+
+    @classmethod
+    def init_router_with_semantic_bias(cls, model, tokenizer=None,
+                                       code_keywords=None, reasoning_keywords=None):
+        """
+        Fase 3: Inicializa el router con bias semántico suave.
+
+        Las filas del router para expertos Qwen se sesgan hacia tokens de código.
+        Las filas del router para Phi se sesgan hacia tokens de razonamiento.
+
+        Esto es SOLO inicialización. El entrenamiento ajustará los pesos.
+        """
+        if code_keywords is None:
+            code_keywords = [
+                "python", "function", "class", "import", "def", "return",
+                "code", "script", "variable", "loop", "array", "debug",
+                "error", "compile", "rust", "cpp", "javascript", "html"
+
+--- línea aproximada 309 ---
+
+    @classmethod
+    def init_router_with_semantic_bias(cls, model, tokenizer=None,
+                                       code_keywords=None, reasoning_keywords=None):
+        """
+        Fase 3: Inicializa el router con bias semántico suave.
+
+        Las filas del router para expertos Qwen se sesgan hacia tokens de código.
+        Las filas del router para Phi se sesgan hacia tokens de razonamiento.
+
+        Esto es SOLO inicialización. El entrenamiento ajustará los pesos.
+        """
+        if code_keywords is None:
+            code_keywords = [
+                "python", "function", "class", "import", "def", "return",
+                "code", "script", "variable", "loop", "array", "debug",
+                "error", "compile", "rust", "cpp", "javascript", "html",
+                "css", "api", "json", "sql", "git", "docker", "linux",
+         
+
+--- línea aproximada 333 ---
+"analyze", "conclude", "hypothesis", "proof", "solve",
+                "integral", "derivative", "matrix", "probability",
+            ]
+
+        if tokenizer is None:
+            print("⚠️ No tokenizer provided, skipping semantic bias init")
+            return
+
+        for name, module in model.named_modules():
+            if isinstance(module, V4XRouter):
+                with torch.no_grad():
+                    weight = module.weight.weight  # (num_experts, hidden_size)
+
+                    # No tocar expertos base (0-127), ya tienen buenos pesos
+                    num_base = module.num_base_experts
+
+                    # Obtener embeddings de keywords
+                    embed_layer = None
+                    for n, m in model.named_modules():
+                        if "embed" in n.lower() and hasattr(m, "weight"):
+                        
+
+--- línea aproximada 388 ---
+irection = F.normalize(reason_direction, dim=0)
+                        scale = weight[:num_base].norm(dim=1).mean().item() * 0.3
+                        phi_idx = num_base + 48
+                        if phi_idx < weight.shape[0]:
+                            weight[phi_idx] += (reason_direction * scale).to(weight.dtype)
+
+                print(f"✅ Router {name}: bias semántico aplicado (code={code_count} tokens, reasoning={reason_count} tokens)")
+
+
 ========================================================================================================================
 7. EXPERT MAP — MAPEO LÓGICO
 ========================================================================================================================
 expert_map                → 0
-expert_id                 → 0
-expert_idx                → 0
+expert_id                 → 7
+expert_idx                → 7
 expert_index              → 0
-qwen_expert               → 0
-phi_expert                → 0
-shared_expert             → 0
+qwen_expert               → 4
+phi_expert                → 4
+shared_expert             → 5
 nemotron_expert           → 0
-new_experts               → 0
-shared_experts            → 0
+new_experts               → 6
+shared_experts            → 5
 
 ========================================================================================================================
 8. EXPERT MAP — CONTEXTO
 ========================================================================================================================
 
+--- línea 36 ---
+ F
+from transformers import PreTrainedModel, PretrainedConfig
+from typing import Optional, Tuple
+import math
+
+
+class V4XConfig(PretrainedConfig):
+    model_type = "V4X"
+
+    def __init__(
+        self,
+        hidden_size=2688,
+        num_hidden_layers=52,
+        num_base_experts=128,
+        num_shared_experts=1,
+        num_qwen_experts=48,
+        num_phi_experts=1,
+        num_experts_per_tok=6,
+        base_intermediate_size=1856,
+        shared_intermediate_size=3712,
+        vocab_size=131072,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+   
+
+--- línea 37 ---
+eTrainedModel, PretrainedConfig
+from typing import Optional, Tuple
+import math
+
+
+class V4XConfig(PretrainedConfig):
+    model_type = "V4X"
+
+    def __init__(
+        self,
+        hidden_size=2688,
+        num_hidden_layers=52,
+        num_base_experts=128,
+        num_shared_experts=1,
+        num_qwen_experts=48,
+        num_phi_experts=1,
+        num_experts_per_tok=6,
+        base_intermediate_size=1856,
+        shared_intermediate_size=3712,
+        vocab_size=131072,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_
+
+--- línea 38 ---
+ig
+from typing import Optional, Tuple
+import math
+
+
+class V4XConfig(PretrainedConfig):
+    model_type = "V4X"
+
+    def __init__(
+        self,
+        hidden_size=2688,
+        num_hidden_layers=52,
+        num_base_experts=128,
+        num_shared_experts=1,
+        num_qwen_experts=48,
+        num_phi_experts=1,
+        num_experts_per_tok=6,
+        base_intermediate_size=1856,
+        shared_intermediate_size=3712,
+        vocab_size=131072,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_siz
+
+--- línea 49 ---
+mediate_size=1856,
+        shared_intermediate_size=3712,
+        vocab_size=131072,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto b
+
+--- línea 49 ---
+      shared_intermediate_size=3712,
+        vocab_size=131072,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto base de Nemotron: up_p
+
+--- línea 50 ---
+712,
+        vocab_size=131072,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto base de Nemotron: up_proj + down_proj con relu2."""
+
+
+--- línea 50 ---
+size=131072,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto base de Nemotron: up_proj + down_proj con relu2."""
+    def __init__(se
+
+--- línea 51 ---
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto base de Nemotron: up_proj + down_proj con relu2."""
+    def __init__(self, hidden_size, intermediate
+
+--- línea 51 ---
+er().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_experts = num_shared_experts
+        self.num_qwen_experts = num_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto base de Nemotron: up_proj + down_proj con relu2."""
+    def __init__(self, hidden_size, intermediate_size):
+        su
+
+--- línea 56 ---
+um_qwen_experts
+        self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto base de Nemotron: up_proj + down_proj con relu2."""
+    def __init__(self, hidden_size, intermediate_size):
+        super().__init__()
+        self.up_proj = nn.Linear(hidden_size, intermediate_size, bias=False)
+        self.down_proj = nn.Linear(intermediate_size, hidden_size, bias=False)
+
+    def forward(self, x):
+        return self.down_proj(F.relu(self.up_proj(
+
+--- línea 56 ---
+      self.num_phi_experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto base de Nemotron: up_proj + down_proj con relu2."""
+    def __init__(self, hidden_size, intermediate_size):
+        super().__init__()
+        self.up_proj = nn.Linear(hidden_size, intermediate_size, bias=False)
+        self.down_proj = nn.Linear(intermediate_size, hidden_size, bias=False)
+
+    def forward(self, x):
+        return self.down_proj(F.relu(self.up_proj(x)) ** 2)
+
+
+class 
+
+--- línea 56 ---
+experts = num_phi_experts
+        self.num_experts_per_tok = num_experts_per_tok
+        self.base_intermediate_size = base_intermediate_size
+        self.shared_intermediate_size = shared_intermediate_size
+        self.vocab_size = vocab_size
+        self.total_new_experts = num_qwen_experts + num_phi_experts
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXPERTOS
+# ═══════════════════════════════════════════════════════════════
+
+class NemotronExpert(nn.Module):
+    """Experto base de Nemotron: up_proj + down_proj con relu2."""
+    def __init__(self, hidden_size, intermediate_size):
+        super().__init__()
+        self.up_proj = nn.Linear(hidden_size, intermediate_size, bias=False)
+        self.down_proj = nn.Linear(intermediate_size, hidden_size, bias=False)
+
+    def forward(self, x):
+        return self.down_proj(F.relu(self.up_proj(x)) ** 2)
+
+
+class NewExpert(nn.Modul
+
+--- línea 162 ---
+g.hidden_size
+
+        # Expertos base Nemotron (0-127)
+        self.experts = nn.ModuleList([
+            NemotronExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.num_base_experts)
+        ])
+
+        # Shared expert Nemotron (siempre activo)
+        self.shared_experts = NemotronExpert(
+            config.hidden_size, config.shared_intermediate_size)
+
+        # Expertos nuevos: Qwen (48) + Phi (1)
+        self.new_experts = nn.ModuleList([
+            NewExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.total_new_experts)
+        ])
+
+        # Router V4X unificado
+        total_routed = config.num_base_experts + config.total_new_experts
+        self.v4x_router = V4XRouter(
+            config.hidden_size,
+            total_routed,
+            config.num_experts_per_tok,
+            config.num_base_experts
+        )
+
+
+--- línea 166 ---
+mediate_size)
+            for _ in range(config.num_base_experts)
+        ])
+
+        # Shared expert Nemotron (siempre activo)
+        self.shared_experts = NemotronExpert(
+            config.hidden_size, config.shared_intermediate_size)
+
+        # Expertos nuevos: Qwen (48) + Phi (1)
+        self.new_experts = nn.ModuleList([
+            NewExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.total_new_experts)
+        ])
+
+        # Router V4X unificado
+        total_routed = config.num_base_experts + config.total_new_experts
+        self.v4x_router = V4XRouter(
+            config.hidden_size,
+            total_routed,
+            config.num_experts_per_tok,
+            config.num_base_experts
+        )
+
+        # Gate original de Nemotron (se mantiene para compatibilidad)
+        self.gate = None  # Se carga desde los pesos
+
+    def forward(self, hidden_sta
+
+--- línea 168 ---
+ared_experts = NemotronExpert(
+            config.hidden_size, config.shared_intermediate_size)
+
+        # Expertos nuevos: Qwen (48) + Phi (1)
+        self.new_experts = nn.ModuleList([
+            NewExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.total_new_experts)
+        ])
+
+        # Router V4X unificado
+        total_routed = config.num_base_experts + config.total_new_experts
+        self.v4x_router = V4XRouter(
+            config.hidden_size,
+            total_routed,
+            config.num_experts_per_tok,
+            config.num_base_experts
+        )
+
+        # Gate original de Nemotron (se mantiene para compatibilidad)
+        self.gate = None  # Se carga desde los pesos
+
+    def forward(self, hidden_states):
+        """
+        Args:
+            hidden_states: (batch, seq_len, hidden_size)
+        Returns:
+            output: (batch, seq_len, 
+
+--- línea 172 ---
+evos: Qwen (48) + Phi (1)
+        self.new_experts = nn.ModuleList([
+            NewExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.total_new_experts)
+        ])
+
+        # Router V4X unificado
+        total_routed = config.num_base_experts + config.total_new_experts
+        self.v4x_router = V4XRouter(
+            config.hidden_size,
+            total_routed,
+            config.num_experts_per_tok,
+            config.num_base_experts
+        )
+
+        # Gate original de Nemotron (se mantiene para compatibilidad)
+        self.gate = None  # Se carga desde los pesos
+
+    def forward(self, hidden_states):
+        """
+        Args:
+            hidden_states: (batch, seq_len, hidden_size)
+        Returns:
+            output: (batch, seq_len, hidden_size)
+        """
+        batch_size, seq_len, hidden_dim = hidden_states.shape
+        hidden_flat = hidden_st
+
+--- línea 195 ---
+s:
+            output: (batch, seq_len, hidden_size)
+        """
+        batch_size, seq_len, hidden_dim = hidden_states.shape
+        hidden_flat = hidden_states.view(-1, hidden_dim)
+        num_tokens = hidden_flat.shape[0]
+
+        # 1. Shared expert (siempre activo)
+        shared_output = self.shared_experts(hidden_flat)
+
+        # 2. Router V4X: seleccionar top-K expertos
+        weights, indices = self.v4x_router(hidden_flat)
+        # weights: (num_tokens, top_k)
+        # indices: (num_tokens, top_k)
+
+        # 3. Ejecutar expertos seleccionados
+        routed_output = torch.zeros_like(hidden_flat)
+
+        # Expertos base Nemotron (0 a num_base-1)
+        for expert_idx in range(self.config.num_base_experts):
+            # Máscara: qué tokens activan este experto
+            mask = (indices == expert_idx).any(dim=-1)  # (num_tokens,)
+            if not mask.any():
+                continue
+
+
+
+--- línea 226 ---
+ts[token_indices],
+                torch.zeros_like(weights[token_indices])
+            ).sum(dim=-1, keepdim=True)
+
+            routed_output[token_indices] += expert_output * expert_weight
+
+        # Expertos nuevos (num_base a num_base + total_new - 1)
+        for i, new_expert in enumerate(self.new_experts):
+            global_idx = self.config.num_base_experts + i
+            mask = (indices == global_idx).any(dim=-1)
+            if not mask.any():
+                continue
+
+            token_indices = mask.nonzero(as_tuple=True)[0]
+            expert_input = hidden_flat[token_indices]
+            expert_output = new_expert(expert_input)
+
+            expert_weight = torch.where(
+                indices[token_indices] == global_idx,
+                weights[token_indices],
+                torch.zeros_like(weights[token_indices])
+            ).sum(dim=-1, keepdim=True)
+
+            routed_output[t
+
+--- línea 258 ---
+════
+# MODELO COMPLETO
+# ═══════════════════════════════════════════════════════════════
+
+class V4XForCausalLM(PreTrainedModel):
+    """
+    AI-ku Thinker-Max V4X.
+
+    El modelo base es Nemotron-H (cargado desde los pesos backbone.*).
+    Los expertos nuevos se cargan desde backbone.layers.X.mixer.new_experts.*.
+
+    Para inferencia real, usar llama.cpp con el GGUF convertido.
+    Este forward es para entrenamiento del router con transformers/PEFT.
+    """
+    config_class = V4XConfig
+    _no_split_modules = ["V4XMoEBlock"]
+
+    def __init__(self, config: V4XConfig):
+        super().__init__(config)
+        self.config = config
+
+    @classmethod
+    def get_expert_metadata(cls):
+        """Metadatos de expertos para logging/debugging. NO afectan al routing."""
+        return {
+            "0-127": {"origin": "nemotron", "type": "general", "activation": "relu2"},
+            "128": {"origin": "nemo
+
 ========================================================================================================================
 9. FORWARD PIPELINE — LLAMADAS
 ========================================================================================================================
 
+FORWARD: forward
+  self.down_proj
+  F.relu
+  self.up_proj
+
+FORWARD: forward
+  self.down_proj
+  F.silu
+  self.up_proj
+  self.gate_proj
+
+FORWARD: forward
+  self.weight
+  torch.topk
+  to
+  F.softmax
+
+FORWARD: forward
+  hidden_states.view
+  self.shared_experts
+  self.v4x_router
+  torch.zeros_like
+  range
+  enumerate
+  output.view
+  any
+  sum
+  any
+  new_expert
+  sum
+  mask.any
+  mask.nonzero
+  mask.any
+  mask.nonzero
+  torch.where
+  torch.where
+  torch.zeros_like
+  torch.zeros_like
+
 ========================================================================================================================
 10. MODULES / SUBMODULES
 ========================================================================================================================
+logits = self.weight
+weights = to
+hidden_flat = hidden_states.view
+shared_output = self.shared_experts
+routed_output = torch.zeros_like
+mask = any
+expert_weight = sum
+mask = any
+expert_output = new_expert
+expert_weight = sum
+code_direction = torch.zeros
+reason_direction = torch.zeros
+ids = tokenizer.encode
+code_direction = F.normalize
+ids = tokenizer.encode
+reason_direction = F.normalize
 
 ========================================================================================================================
 11. NEMOTRON-H — ESTRUCTURA ORIGINAL
 ========================================================================================================================
+CLASS: HybridMambaAttentionDynamicCache
+CLASS: MambaRMSNormGated
+CLASS: NemotronHMamba2Mixer
+CLASS: NemotronHRMSNorm
+CLASS: NemotronHBlock
+CLASS: NemotronHMLP
+CLASS: NemotronHMOE
+CLASS: NemotronHTopkRouter
+CLASS: NemotronHAttention
+CLASS: NemotronHFlashAttention2
+CLASS: NemotronHSdpaAttention
+CLASS: NemotronHPreTrainedModel
+CLASS: NemotronHOutput
+CLASS: NemotronHCausalLMOutput
+CLASS: NemotronHModel
+CLASS: NemotronHForCausalLM
+
+FORWARD-RELATED METHODS:
+  forward (line 271)
+  cuda_kernels_forward (line 353)
+  torch_forward (line 516)
+  forward (line 707)
+  forward (line 733)
+  forward (line 762)
+  forward (line 814)
+  moe (line 833)
+  forward (line 864)
+  forward (line 908)
+  forward (line 964)
+  forward (line 1035)
+  forward (line 1126)
+  forward (line 1418)
+  forward (line 1674)
 
 ========================================================================================================================
 12. NEMOTRON-H — FORWARD CONTEXT
 ========================================================================================================================
 
+e, eps=1e-5):
+        super().__init__()
+        self.weight = nn.Parameter(torch.ones(hidden_size))
+        self.variance_epsilon = eps
+        self.group_size = group_size
+
+    # jan28b version
+    def forward(self, hidden_states, gate=None):
+        return rmsnorm_fn(x=hidden_states,
+                          weight=self.weight,
+                          bias=None, # No bias
+                          z=gate,
+                          eps=self.variance_epsilon,
+                          group_size=self.group_size,
+                          norm_before_gate=False
+        )
+
+class NemotronHMamba2Mixer(nn.Module):
+    """
+    Compute ∆, A, B, C, and D the state space parameters and compute the `contextualized_states`.
+    A, D are input independent (see Mamba paper [1] Section 3.5.2 "Interpretation of A" for why A isn't selective)
+    ∆, B, C are input-dependent (this is a key difference between Mamba and the linear time invariant S4,
+    and is why Mamba is called **selective** state spaces)
+    """
+
+    def __init__(self, config: NemotronHConfig, layer_idx: int):
+        super().__init__()
+        self.num_heads = config.mamba_num_heads
+        self.hidden_size = config.hidden_size
+        self.ssm_state_size = config.ssm_state_size
+        self.conv_kernel_size = config.conv_kernel
+        self.intermediate_size = config.mamba_num_heads * config.mamba_head_dim
+        self.layer_idx = layer_idx
+        self.use_conv_bias = config.use_conv_bias
+        self.activation = config.mamba_hidden_act
+        self.act = ACT2FN[config.mamba_hidden_act]
+
+        self.layer_norm_epsilon = config.layer_norm_epsilon
+
+        self.n_groups = config.n_groups
+        self.head_dim = config.mamba_head_dim
+        self.chunk_size = config.chunk_size
+
+        self.time_step_limit = config.time_step_limit
+        self.time_step_min = config.time_step_min
+        self.time_step_max = config.time_step_max
+
+        self.conv_dim = self.intermediate_size + 2 * self.n_groups * self.ssm_state_size
+   
+
+ive
+
+        # 4. Final linear projection
+        contextualized_states = self.out_proj(scan_output.to(dtype))  # [batch, seq_len, hidden_size]
+        return contextualized_states
+    # fmt: on
+
+    def forward(
+        self,
+        hidden_states,
+        cache_params: Optional[HybridMambaAttentionDynamicCache] = None,
+        cache_position: Optional[torch.LongTensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+    ):
+        if is_fast_path_available and "cuda" in self.in_proj.weight.device.type:
+            return self.cuda_kernels_forward(hidden_states, cache_params, cache_position, attention_mask)
+        dtype = hidden_states.dtype
+        if attention_mask is not None and attention_mask.shape[1] > 1 and attention_mask.shape[0] > 1:
+            # tune out hidden states for pad tokens, see https://github.com/state-spaces/mamba/issues/66
+            hidden_states = (hidden_states * attention_mask[:, :, None]).to(dtype)
+
+        return self.torch_forward(hidden_states, cache_params, cache_position, attention_mask)
+
+
+class NemotronHRMSNorm(nn.Module):
+    def __init__(self, hidden_size, eps=1e-6):
+        """
+        NemotronHRMSNorm is equivalent to T5LayerNorm and LlamaRMSNorm
+        """
+        super().__init__()
+        self.weight = nn.Parameter(torch.ones(hidden_size))
+        self.variance_epsilon = eps
+
+    def forward(self, hidden_states):
+        input_dtype = hidden_states.dtype
+        hidden_states = hidden_states.to(torch.float32)
+        variance = hidden_states.pow(2).mean(-1, keepdim=True)
+        hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)
+        # Weights are in float32
+        return (self.weight.to(torch.float32) * hidden_states).to(input_dtype)
+
+class NemotronHBlock(nn.Module):
+    def __init__(self, config, layer_idx):
+        super().__init__()
+        self.config = config
+        self.layer_idx = layer_idx
+        self.residual_in_fp32 = config.residual_in_fp32
+        self.norm = NemotronHRMSN
+
+otronHRMSNorm is equivalent to T5LayerNorm and LlamaRMSNorm
+        """
+        super().__init__()
+        self.weight = nn.Parameter(torch.ones(hidden_size))
+        self.variance_epsilon = eps
+
+    def forward(self, hidden_states):
+        input_dtype = hidden_states.dtype
+        hidden_states = hidden_states.to(torch.float32)
+        variance = hidden_states.pow(2).mean(-1, keepdim=True)
+        hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)
+        # Weights are in float32
+        return (self.weight.to(torch.float32) * hidden_states).to(input_dtype)
+
+class NemotronHBlock(nn.Module):
+    def __init__(self, config, layer_idx):
+        super().__init__()
+        self.config = config
+        self.layer_idx = layer_idx
+        self.residual_in_fp32 = config.residual_in_fp32
+        self.norm = NemotronHRMSNorm(config.hidden_size, eps=config.layer_norm_epsilon)
+
+        # M: Mamba2, *: Attention, -: MLP
+        self.block_type = config.layers_block_type[layer_idx]
+        if self.block_type == "mamba":
+            self.mixer = NemotronHMamba2Mixer(config, layer_idx=layer_idx)
+        elif self.block_type == "attention":
+            self.mixer = NEMOTRONH_ATTENTION_CLASSES[config._attn_implementation](config, layer_idx=layer_idx)
+        elif self.block_type == "mlp":
+            self.mixer = NemotronHMLP(config, layer_idx=layer_idx)
+        elif self.block_type == "moe":
+            self.mixer = NemotronHMOE(config, layer_idx=layer_idx)
+        else:
+            raise ValueError(f"Invalid layer pattern {config.hybrid_override_pattern[layer_idx]}")
+
+    def forward(
+        self,
+        hidden_states,
+        cache_params: Optional[HybridMambaAttentionDynamicCache] = None,
+        cache_position: Optional[torch.LongTensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+    ):
+        with torch.cuda.stream(torch.cuda.default_stream(hidden_states.device)):
+            # * Use torch.cuda.stream() to avoid NaN issues when using multi
+
+type == "moe":
+            self.mixer = NemotronHMOE(config, layer_idx=layer_idx)
+        else:
+            raise ValueError(f"Invalid layer pattern {config.hybrid_override_pattern[layer_idx]}")
+
+    def forward(
+        self,
+        hidden_states,
+        cache_params: Optional[HybridMambaAttentionDynamicCache] = None,
+        cache_position: Optional[torch.LongTensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+    ):
+        with torch.cuda.stream(torch.cuda.default_stream(hidden_states.device)):
+            # * Use torch.cuda.stream() to avoid NaN issues when using multiple GPUs
+            residual = hidden_states
+            hidden_states = self.norm(hidden_states.to(dtype=self.norm.weight.dtype))
+            if self.residual_in_fp32:
+                residual = residual.to(torch.float32)
+
+            if self.block_type == "mamba":
+                hidden_states = self.mixer(
+                    hidden_states, cache_params=cache_params, cache_position=cache_position
+                )
+            elif self.block_type == "attention":
+                hidden_states = self.mixer(
+                    hidden_states, cache_position=cache_position
+                )
+                hidden_states = hidden_states[0]
+            elif self.block_type in ["mlp", "moe"]:
+                hidden_states = self.mixer(
+                    hidden_states
+                )
+            else:
+                raise ValueError(f"Invalid block_type: {self.block_type}")
+
+            hidden_states = residual + hidden_states
+            return hidden_states
+
+
+# Copied from transformers.models.nemotron.modeling_nemotron Nemotron->NemotronH
+class NemotronHMLP(nn.Module):
+    def __init__(self, config, intermediate_size=None, layer_idx: Optional[int] = None):
+        super().__init__()
+        self.config = config
+        self.layer_idx = layer_idx
+        if layer_idx is None:
+            logger.warning_once(
+                f"Instantiating {self.__class__.__name__} without passing a `l
+
+lf.intermediate_size, bias=config.mlp_bias)
+        self.down_proj = nn.Linear(self.intermediate_size, self.hidden_size, bias=config.mlp_bias)
+        self.act_fn = ACT2FN[config.mlp_hidden_act]
+
+    def forward(self, x):
+        return self.down_proj(self.act_fn(self.up_proj(x)))
+
+
+class NemotronHMOE(nn.Module):
+    def __init__(self, config, layer_idx: Optional[int] = None):
+        super().__init__()
+        self.config = config
+        self.experts = nn.ModuleList(
+            [
+                NemotronHMLP(config, intermediate_size=config.moe_intermediate_size, layer_idx=layer_idx)
+                for _ in range(config.n_routed_experts)
+            ]
+        )
+        self.gate = NemotronHTopkRouter(config)
+        self.shared_experts = NemotronHMLP(
+            config=config, intermediate_size=config.moe_shared_expert_intermediate_size, layer_idx=layer_idx
+        )
+
+    def moe(self, hidden_states: torch.Tensor, topk_indices: torch.Tensor, topk_weights: torch.Tensor):
+        r"""
+        CALL FOR CONTRIBUTION! I don't have time to optimise this right now, but expert weights need to be fused
+        to not have to do a loop here (deepseek has 256 experts soooo yeah).
+        """
+        final_hidden_states = torch.zeros_like(hidden_states, dtype=topk_weights.dtype)
+        expert_mask = torch.nn.functional.one_hot(topk_indices, num_classes=len(self.experts))
+        expert_mask = expert_mask.permute(2, 0, 1)
+
+        for expert_idx in range(len(self.experts)):
+            expert = self.experts[expert_idx]
+            mask = expert_mask[expert_idx]
+            token_indices, weight_indices = torch.where(mask)
+
+            if token_indices.numel() > 0:
+                expert_weights = topk_weights[token_indices, weight_indices]
+                expert_input = hidden_states[token_indices]
+                expert_output = expert(expert_input)
+                weighted_output = expert_output * expert_weights.unsqueeze(-1)
+                final_hidden_states.index_add_(0, token_
+
+ # thus the moe module is itelsf an IsolatedParallel module
+        # and all expert are "local" meaning we shard but we don't gather
+        return final_hidden_states.type(hidden_states.dtype)
+
+    def forward(self, hidden_states):
+        residuals = hidden_states
+        orig_shape = hidden_states.shape
+        topk_indices, topk_weights = self.gate(hidden_states)
+        hidden_states = hidden_states.view(-1, hidden_states.shape[-1])
+        hidden_states = self.moe(hidden_states, topk_indices, topk_weights).view(*orig_shape)
+        hidden_states = hidden_states + self.shared_experts(residuals)
+        return hidden_states
+
+
+class NemotronHTopkRouter(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.top_k = config.num_experts_per_tok
+        self.n_routed_experts = config.n_routed_experts
+        self.routed_scaling_factor = config.routed_scaling_factor
+        self.n_group = config.n_group
+        self.topk_group = config.topk_group
+        self.norm_topk_prob = config.norm_topk_prob
+
+        self.weight = nn.Parameter(torch.empty((self.n_routed_experts, config.hidden_size), dtype=torch.float32))
+        self.register_buffer("e_score_correction_bias", torch.zeros(self.n_routed_experts, dtype=torch.float32))
+
+    @torch.no_grad()
+    def get_topk_indices(self, scores):
+        scores_for_choice = scores.view(-1, self.n_routed_experts) + self.e_score_correction_bias.unsqueeze(0)
+        group_scores = (
+            scores_for_choice.view(-1, self.n_group, self.n_routed_experts // self.n_group)
+            .topk(2, dim=-1)[0]
+            .sum(dim=-1)
+        )
+        group_idx = torch.topk(group_scores, k=self.topk_group, dim=-1, sorted=False)[1]
+        group_mask = torch.zeros_like(group_scores)
+        group_mask.scatter_(1, group_idx, 1)
+        score_mask = (
+            group_mask.unsqueeze(-1)
+            .expand(-1, self.n_group, self.n_routed_experts // self.n_group)
+            .reshape(-1, self.n_ro
+
+scores_for_choice = scores_for_choice.masked_fill(~score_mask.bool(), 0.0)
+        topk_indices = torch.topk(scores_for_choice, k=self.top_k, dim=-1, sorted=False)[1]
+        return topk_indices
+
+    def forward(self, hidden_states):
+        hidden_states = hidden_states.view(-1, self.config.hidden_size)
+        router_logits = F.linear(hidden_states.type(torch.float32), self.weight.type(torch.float32))
+        scores = router_logits.sigmoid()
+        topk_indices = self.get_topk_indices(scores)
+        topk_weights = scores.gather(1, topk_indices)
+        if self.norm_topk_prob:
+            denominator = topk_weights.sum(dim=-1, keepdim=True) + 1e-20
+            topk_weights /= denominator
+        topk_weights = topk_weights * self.routed_scaling_factor
+        return topk_indices, topk_weights
+
+# Copied from transformers.models.llama.modeling_llama.repeat_kv
+def repeat_kv(hidden_states: torch.Tensor, n_rep: int) -> torch.Tensor:
+    """
+    This is the equivalent of torch.repeat_interleave(x, dim=1, repeats=n_rep). The hidden states go from (batch,
+    num_key_value_heads, seqlen, head_dim) to (batch, num_attention_heads, seqlen, head_dim)
+    """
+    batch, num_key_value_heads, slen, head_dim = hidden_states.shape
+    if n_rep == 1:
+        return hidden_states
+    hidden_states = hidden_states[:, :, None, :, :].expand(batch, num_key_value_heads, n_rep, slen, head_dim)
+    return hidden_states.reshape(batch, num_key_value_heads * n_rep, slen, head_dim)
+
+
+class NemotronHAttention(nn.Module):
+    """Multi-headed attention from 'Attention Is All You Need' paper"""
+
+    def __init__(self, config: NemotronHConfig, layer_idx: Optional[int] = None):
+        super().__init__()
+        self.config = config
+        self.layer_idx = layer_idx
+        if layer_idx is None:
+            logger.warning_once(
+                f"Instantiating {self.__class__.__name__} without passing a `layer_idx` is not recommended and will "
+                "lead to errors during the forward call if cachin
+
+f.hidden_size, self.num_key_value_heads * self.head_dim, bias=config.attention_bias)
+        self.o_proj = nn.Linear(self.head_dim * self.num_heads, self.hidden_size, bias=config.attention_bias)
+
+    def forward(
+        self,
+        hidden_states: torch.Tensor,
+        # position_embeddings: Tuple[torch.Tensor, torch.Tensor], #TODO
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_value: Optional[HybridMambaAttentionDynamicCache] = None,
+        output_attentions: bool = False,
+        use_cache: bool = False,
+        cache_position: Optional[torch.LongTensor] = None,
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+        bsz, q_len, _ = hidden_states.size()
+
+        query_states = self.q_proj(hidden_states)
+        key_states = self.k_proj(hidden_states)
+        value_states = self.v_proj(hidden_states)
+
+        query_states = query_states.view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
+        key_states = key_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+        value_states = value_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+
+        if past_key_value is not None:
+            key_states, value_states = past_key_value.update(key_states, value_states, self.layer_idx)
+
+        key_states = repeat_kv(key_states, self.num_key_value_groups)
+        value_states = repeat_kv(value_states, self.num_key_value_groups)
+
+        causal_mask = attention_mask
+        if attention_mask is not None:  # no matter the length, we just slice it
+            causal_mask = attention_mask[:, :, :, : key_states.shape[-2]]
+
+        if query_states.device.type == "cuda" and attention_mask is not None:
+            query_states = query_states.contiguous()
+            key_states = key_states.contiguous()
+            value_states = value_states.contiguous()
+
+        is_causal = True if causal_mask is 
+
+attn<2.1, using q_seqlen != k_seqlen (except for the case q_seqlen == 1) produces a wrong mask (top-left).
+        self._flash_attn_uses_top_left_mask = not is_flash_attn_greater_or_equal_2_10()
+
+    def forward(
+        self,
+        hidden_states: torch.Tensor,
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_value: Optional[HybridMambaAttentionDynamicCache] = None,
+        output_attentions: bool = False,
+        use_cache: bool = False,
+        cache_position: Optional[torch.LongTensor] = None,
+        **kwargs,
+    ):
+        bsz, q_len, _ = hidden_states.size()
+
+        query_states = self.q_proj(hidden_states)
+        key_states = self.k_proj(hidden_states)
+        value_states = self.v_proj(hidden_states)
+
+        # Flash attention requires the input to have the shape
+        # batch_size x seq_length x head_dim x hidden_dim
+        # therefore we just need to keep the original shape
+        query_states = query_states.view(bsz, q_len, self.num_heads, self.head_dim)
+        key_states = key_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+        value_states = value_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+
+        if past_key_value is not None:
+            key_states, value_states = past_key_value.update(key_states, value_states, self.layer_idx)
+
+        # repeat k/v heads if n_kv_heads < n_heads
+        key_states = repeat_kv(key_states, self.num_key_value_groups)
+        value_states = repeat_kv(value_states, self.num_key_value_groups)
+        dropout_rate = 0.0 if not self.training else self.attention_dropout
+
+        # In PEFT, usually we cast the layer norms in float32 for training stability reasons
+        # therefore the input hidden states gets silently casted in float32. Hence, we need
+        # cast them back in float16 just to be sure everything works as expected.
+        input_dtype = query_states.dtype
+  
+
+s from
+    `JambaAttention` as the weights of the module stays untouched. The only changes are on the forward pass to adapt to
+    SDPA API.
+    """
+
+    # Adapted from NemotronHAttention.forward
+    def forward(
+        self,
+        hidden_states: torch.Tensor,
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_value: Optional[HybridMambaAttentionDynamicCache] = None,
+        output_attentions: bool = False,
+        use_cache: bool = False,
+        cache_position: Optional[torch.LongTensor] = None,
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+        if output_attentions:
+            # TODO: Improve this warning with e.g. `model.config.attn_implementation = "manual"` once this is implemented.
+            logger.warning_once(
+                "NemotronHModel is using NemotronHSdpaAttention, but `torch.nn.functional.scaled_dot_product_attention` does not support `output_attentions=True`. Falling back to the manual attention implementation, "
+                'but specifying the manual implementation will be required from Transformers version v5.0.0 onwards. This warning can be removed using the argument `attn_implementation="eager"` when loading the model.'
+            )
+            return super().forward(
+                hidden_states=hidden_states,
+                attention_mask=attention_mask,
+                position_ids=position_ids,
+                past_key_value=past_key_value,
+                output_attentions=output_attentions,
+                use_cache=use_cache,
+            )
+
+        bsz, q_len, _ = hidden_states.size()
+
+        query_states = self.q_proj(hidden_states)
+        key_states = self.k_proj(hidden_states)
+        value_states = self.v_proj(hidden_states)
+
+        query_states = query_states.view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
+        key_states = key_states.view(bsz, q_len, self.num_key_value_heads, self.head_di
+
+model_forward(NEMOTRONH_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=NemotronHOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
+    def forward(
+        self,
+        input_ids: Optional[torch.LongTensor] = None,
+        inputs_embeds: Optional[torch.LongTensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        cache_params: Optional[HybridMambaAttentionDynamicCache] = None,
+        use_cache: Optional[bool] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        cache_position: Optional[torch.LongTensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        **kwargs,
+    ) -> Union[Tuple, NemotronHOutput]:
+        output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
+        output_hidden_states = (
+            output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
+        )
+        # use_cache = use_cache if use_cache is not None else self.config.use_cache
+        use_cache = use_cache if use_cache is not None else (self.config.use_cache if not self.training else False)
+
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+
+        if (input_ids is None) ^ (inputs_embeds is not None):  # ^ is python for xor
+            raise ValueError("You must specify exactly one of input_ids or inputs_embeds")
+
+        if inputs_embeds is None:
+            inputs_embeds = self.embeddings(input_ids)
+
+        if self.gradient_checkpointing and self.training and use_cache:
+            logger.warning_once(
+                "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`."
+            )
+            use_cache = False
+
+        # From zamba_modeling.py
+        if use_cache and cache_params is None:
+            logge
+
+rward(NEMOTRONH_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=NemotronHCausalLMOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
+    def forward(
+        self,
+        input_ids: Optional[torch.LongTensor] = None,
+        inputs_embeds: Optional[torch.FloatTensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        cache_params: Optional[HybridMambaAttentionDynamicCache] = None,
+        labels: Optional[torch.LongTensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        use_cache: Optional[bool] = None,
+        cache_position: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        **kwargs,  # for now we need this for generation
+    ) -> Union[Tuple, NemotronHCausalLMOutput]:
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
+            Labels for language modeling. Note that the labels **are shifted** inside the model, i.e. you can set
+            `labels = input_ids` Indices are selected in `[-100, 0, ..., config.vocab_size]` All labels set to `-100`
+            are ignored (masked), the loss is only computed for labels in `[0, ..., config.vocab_size]`
+        """
+        output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
+
+        output_hidden_states = (
+            output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
+        )
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+
+        nemotron_h_outputs = self.backbone(
+            input_ids,
+            cache_params=cache_params,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=
+
 ========================================================================================================================
 13. IMPORTS V4X
 ========================================================================================================================
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from transformers import PreTrainedModel, PretrainedConfig
+from typing import Optional, Tuple
+import math
 
 ========================================================================================================================
 14. QWEN / PHI — IMPLEMENTACIÓN
 ========================================================================================================================
-qwen            → 0
-phi             → 0
-coder           → 0
+qwen            → 14
+phi             → 16
+coder           → 2
 mlp             → 0
-gate_proj       → 0
-up_proj         → 0
-down_proj       → 0
-silu            → 0
+gate_proj       → 4
+up_proj         → 9
+down_proj       → 9
+silu            → 8
 gelu            → 0
 
 ========================================================================================================================
 15. ACTIVACIONES
 ========================================================================================================================
-silu            → 0
+silu            → 8
 gelu            → 0
-relu            → 0
+relu            → 6
 swiglu          → 0
 swiglu          → 0
 sigmoid         → 0
-softmax         → 0
+softmax         → 1
 
 ========================================================================================================================
 16. OPERACIONES DE ROUTING
 ========================================================================================================================
-.topk(               → 0
-topk(                → 0
-softmax(             → 0
+.topk(               → 1
+topk(                → 1
+softmax(             → 1
 scatter              → 0
 index_add            → 0
 index_select         → 0
 gather               → 0
-where(               → 0
+where(               → 2
 masked_fill          → 0
 
 ========================================================================================================================
 17. CAPAS
 ========================================================================================================================
 CONFIG: []
-V4X: []
+V4X: ['52']
 NEMOTRON: []
 
 ========================================================================================================================
@@ -141,34 +2208,339 @@ Según la arquitectura documentada:
 ========================================================================================================================
 19. IDS 128 / 129 / 176 / 177 EN MODELING_V4X
 ========================================================================================================================
-ID   0: 0 coincidencias
+ID   0: 21 coincidencias
 ID  47: 0 coincidencias
-ID  48: 0 coincidencias
-ID 127: 0 coincidencias
-ID 128: 0 coincidencias
-ID 129: 0 coincidencias
-ID 176: 0 coincidencias
-ID 177: 0 coincidencias
+ID  48: 6 coincidencias
+ID 127: 4 coincidencias
+ID 128: 7 coincidencias
+ID 129: 3 coincidencias
+ID 176: 3 coincidencias
+ID 177: 3 coincidencias
 
 ========================================================================================================================
 20. CONTEXTO DE IDS ESPECIALES
 ========================================================================================================================
 
 ######## ID 128 ########
+"""
+AI-ku Thinker-Max V4X — Arquitectura V4X
+
+Extiende Nemotron-H (Mamba + MoE híbrido) con expertos externos
+de Qwen3-Coder y Phi-4.
+
+Estructura por capa MoE:
+  - 128 expertos base Nemotron (up_proj + down_proj, relu2)
+  - 1 shared expert Nemotron (up_proj + down_proj)
+  - 48 expertos Qwen colapsados (gate_proj + up_proj + down_proj, silu)
+  - 1 experto Phi colapsado (gate_proj + up_proj + down_proj, silu)
+  - Router original Nemotron (128 expertos base)
+  - Router V4X (178 expertos = 128 base + 48 Qwen + 1 Phi + 1 shared)
+
+El forward:
+  1. Nemotron procesa normalmente (Mamba/Attention + MoE base)
+  2. En cap
+(up_proj + down_proj, relu2)
+  - 1 shared expert Nemotron (up_proj + down_proj)
+  - 48 expertos Qwen colapsados (gate_proj + up_proj + down_proj, silu)
+  - 1 experto Phi colapsado (gate_proj + up_proj + down_proj, silu)
+  - Router original Nemotron (128 expertos base)
+  - Router V4X (178 expertos = 128 base + 48 Qwen + 1 Phi + 1 shared)
+
+El forward:
+  1. Nemotron procesa normalmente (Mamba/Attention + MoE base)
+  2. En capas MoE, el router V4X decide si activar expertos externos
+  3. La salida de los expertos externos se suma a la del MoE base
+"""
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from transformers import PreTrainedModel, PretrainedConfig
+from typing import Opti
+emotron (up_proj + down_proj)
+  - 48 expertos Qwen colapsados (gate_proj + up_proj + down_proj, silu)
+  - 1 experto Phi colapsado (gate_proj + up_proj + down_proj, silu)
+  - Router original Nemotron (128 expertos base)
+  - Router V4X (178 expertos = 128 base + 48 Qwen + 1 Phi + 1 shared)
+
+El forward:
+  1. Nemotron procesa normalmente (Mamba/Attention + MoE base)
+  2. En capas MoE, el router V4X decide si activar expertos externos
+  3. La salida de los expertos externos se suma a la del MoE base
+"""
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from transformers import PreTrainedModel, PretrainedConfig
+from typing import Optional, Tuple
+import math
+
+
+class V4XConfig(Pretrain
+ainedModel, PretrainedConfig
+from typing import Optional, Tuple
+import math
+
+
+class V4XConfig(PretrainedConfig):
+    model_type = "V4X"
+
+    def __init__(
+        self,
+        hidden_size=2688,
+        num_hidden_layers=52,
+        num_base_experts=128,
+        num_shared_experts=1,
+        num_qwen_experts=48,
+        num_phi_experts=1,
+        num_experts_per_tok=6,
+        base_intermediate_size=1856,
+        shared_intermediate_size=3712,
+        vocab_size=131072,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_base_experts = num_base_experts
+        self.num_shared_expert
+ros (agnóstico).
+    Fase 2: El SFT entrena el router para que aprenda qué experto usar.
+    Fase 3: Bias inicial por especialización (opcional).
+    """
+    def __init__(self, hidden_size, num_total_experts, top_k,
+                 num_base_experts=128, e_score_correction=True):
+        super().__init__()
+        self.top_k = top_k
+        self.num_total_experts = num_total_experts
+        self.num_base_experts = num_base_experts
+
+        # Pesos del router (entrenable)
+        self.weight = nn.Linear(hidden_size, num_total_experts, bias=False)
+
+        # Bias de corrección (como el e_score_correction_bias de Nemotron)
+        if e_score_correction:
+            self.e_score_correction_bias = n
+ BLOQUE MOE V4X
+# ═══════════════════════════════════════════════════════════════
+
+class V4XMoEBlock(nn.Module):
+    """
+    Bloque MoE que combina expertos base de Nemotron + externos.
+
+    Expertos 0-127: Nemotron base (up+down, relu2)
+    Experto 128: Shared expert Nemotron (siempre activo)
+    Expertos 129-176: Qwen colapsados (gate+up+down, silu)
+    Experto 177: Phi colapsado (gate+up+down, silu)
+    """
+    def __init__(self, config: V4XConfig, layer_idx: int):
+        super().__init__()
+        self.config = config
+        self.layer_idx = layer_idx
+        self.hidden_size = config.hidden_size
+
+        # Expertos base Nemotron (0-127)
+        self.experts = nn.ModuleList([
+            
+   @classmethod
+    def get_expert_metadata(cls):
+        """Metadatos de expertos para logging/debugging. NO afectan al routing."""
+        return {
+            "0-127": {"origin": "nemotron", "type": "general", "activation": "relu2"},
+            "128": {"origin": "nemotron", "type": "shared", "activation": "relu2"},
+            "129-176": {"origin": "qwen3-coder", "type": "code", "activation": "silu"},
+            "177": {"origin": "phi-4", "type": "reasoning", "activation": "silu"},
+        }
+
+    @classmethod
+    def get_trainable_params_for_router_sft(cls, model):
+        """
+        Devuelve solo los parámetros del router para Fase 1/2 del SFT.
+        Congela todo lo demás (expertos, at
 
 ######## ID 129 ########
+═══════════════════════
+
+class V4XMoEBlock(nn.Module):
+    """
+    Bloque MoE que combina expertos base de Nemotron + externos.
+
+    Expertos 0-127: Nemotron base (up+down, relu2)
+    Experto 128: Shared expert Nemotron (siempre activo)
+    Expertos 129-176: Qwen colapsados (gate+up+down, silu)
+    Experto 177: Phi colapsado (gate+up+down, silu)
+    """
+    def __init__(self, config: V4XConfig, layer_idx: int):
+        super().__init__()
+        self.config = config
+        self.layer_idx = layer_idx
+        self.hidden_size = config.hidden_size
+
+        # Expertos base Nemotron (0-127)
+        self.experts = nn.ModuleList([
+            NemotronExpert(config.hidden_size, config.base_intermediat
+ara logging/debugging. NO afectan al routing."""
+        return {
+            "0-127": {"origin": "nemotron", "type": "general", "activation": "relu2"},
+            "128": {"origin": "nemotron", "type": "shared", "activation": "relu2"},
+            "129-176": {"origin": "qwen3-coder", "type": "code", "activation": "silu"},
+            "177": {"origin": "phi-4", "type": "reasoning", "activation": "silu"},
+        }
+
+    @classmethod
+    def get_trainable_params_for_router_sft(cls, model):
+        """
+        Devuelve solo los parámetros del router para Fase 1/2 del SFT.
+        Congela todo lo demás (expertos, atención, embeddings).
+
+        Uso:
+            params = V4XForCausalLM.get_trainable
+  break
+
+                    if embed_layer is None:
+                        print("⚠️ No embedding layer found, skipping bias")
+                        return
+
+                    embeddings = embed_layer.weight
+
+                    # Qwen experts (129-176): bias hacia código
+                    code_direction = torch.zeros(weight.shape[1], device=weight.device)
+                    code_count = 0
+                    for kw in code_keywords:
+                        ids = tokenizer.encode(kw, add_special_tokens=False)
+                        for tid in ids:
+                            if tid < embeddings.shape[0]:
+                                code_direction += embeddings[tid].float()
+        
 
 ######## ID 176 ########
+═══════════════════
+
+class V4XMoEBlock(nn.Module):
+    """
+    Bloque MoE que combina expertos base de Nemotron + externos.
+
+    Expertos 0-127: Nemotron base (up+down, relu2)
+    Experto 128: Shared expert Nemotron (siempre activo)
+    Expertos 129-176: Qwen colapsados (gate+up+down, silu)
+    Experto 177: Phi colapsado (gate+up+down, silu)
+    """
+    def __init__(self, config: V4XConfig, layer_idx: int):
+        super().__init__()
+        self.config = config
+        self.layer_idx = layer_idx
+        self.hidden_size = config.hidden_size
+
+        # Expertos base Nemotron (0-127)
+        self.experts = nn.ModuleList([
+            NemotronExpert(config.hidden_size, config.base_intermediate_si
+logging/debugging. NO afectan al routing."""
+        return {
+            "0-127": {"origin": "nemotron", "type": "general", "activation": "relu2"},
+            "128": {"origin": "nemotron", "type": "shared", "activation": "relu2"},
+            "129-176": {"origin": "qwen3-coder", "type": "code", "activation": "silu"},
+            "177": {"origin": "phi-4", "type": "reasoning", "activation": "silu"},
+        }
+
+    @classmethod
+    def get_trainable_params_for_router_sft(cls, model):
+        """
+        Devuelve solo los parámetros del router para Fase 1/2 del SFT.
+        Congela todo lo demás (expertos, atención, embeddings).
+
+        Uso:
+            params = V4XForCausalLM.get_trainable_par
+eak
+
+                    if embed_layer is None:
+                        print("⚠️ No embedding layer found, skipping bias")
+                        return
+
+                    embeddings = embed_layer.weight
+
+                    # Qwen experts (129-176): bias hacia código
+                    code_direction = torch.zeros(weight.shape[1], device=weight.device)
+                    code_count = 0
+                    for kw in code_keywords:
+                        ids = tokenizer.encode(kw, add_special_tokens=False)
+                        for tid in ids:
+                            if tid < embeddings.shape[0]:
+                                code_direction += embeddings[tid].float()
+            
 
 ######## ID 177 ########
+ """
+    Bloque MoE que combina expertos base de Nemotron + externos.
+
+    Expertos 0-127: Nemotron base (up+down, relu2)
+    Experto 128: Shared expert Nemotron (siempre activo)
+    Expertos 129-176: Qwen colapsados (gate+up+down, silu)
+    Experto 177: Phi colapsado (gate+up+down, silu)
+    """
+    def __init__(self, config: V4XConfig, layer_idx: int):
+        super().__init__()
+        self.config = config
+        self.layer_idx = layer_idx
+        self.hidden_size = config.hidden_size
+
+        # Expertos base Nemotron (0-127)
+        self.experts = nn.ModuleList([
+            NemotronExpert(config.hidden_size, config.base_intermediate_size)
+            for _ in range(config.num_base_experts
+"origin": "nemotron", "type": "general", "activation": "relu2"},
+            "128": {"origin": "nemotron", "type": "shared", "activation": "relu2"},
+            "129-176": {"origin": "qwen3-coder", "type": "code", "activation": "silu"},
+            "177": {"origin": "phi-4", "type": "reasoning", "activation": "silu"},
+        }
+
+    @classmethod
+    def get_trainable_params_for_router_sft(cls, model):
+        """
+        Devuelve solo los parámetros del router para Fase 1/2 del SFT.
+        Congela todo lo demás (expertos, atención, embeddings).
+
+        Uso:
+            params = V4XForCausalLM.get_trainable_params_for_router_sft(model)
+            optimizer = torch.optim.AdamW(params, lr=1e-4)
+rts
+                            expert_idx = num_base + i
+                            if expert_idx < weight.shape[0]:
+                                weight[expert_idx] += (code_direction * scale).to(weight.dtype)
+
+                    # Phi expert (177): bias hacia razonamiento
+                    reason_direction = torch.zeros(weight.shape[1], device=weight.device)
+                    reason_count = 0
+                    for kw in reasoning_keywords:
+                        ids = tokenizer.encode(kw, add_special_tokens=False)
+                        for tid in ids:
+                            if tid < embeddings.shape[0]:
+                                reason_direction += embeddings[tid].flo
 
 ========================================================================================================================
 21. TODO / FIXME / IMPLEMENTATION NOTES
 ========================================================================================================================
 
 --- V4X ---
+92:     Router unificado para todos los expertos.
+284:         Congela todo lo demás (expertos, atención, embeddings).
 
 --- NEMOTRON ---
+238:         raise NotImplementedError("HybridMambaAttentionDynamicCache does not have a legacy cache equivalent.")
+242:         raise NotImplementedError("HybridMambaAttentionDynamicCache does not have a legacy cache equivalent.")
+349:                 " is None. Falling back to the naive implementation. To install follow https://github.com/state-spaces/mamba/#installation and"
+620:             # begin ssd naive implementation without einsums
+754:             self.mixer = NEMOTRONH_ATTENTION_CLASSES[config._attn_implementation](config, layer_idx=layer_idx)
+967:         # position_embeddings: Tuple[torch.Tensor, torch.Tensor], #TODO
+1030:         # TODO: Should be removed once Flash Attention for RoCm is bumped to 2.1.
+1137:             # TODO: Improve this warning with e.g. `model.config.attn_implementation = "manual"` once this is implemented.
+1139:                 "NemotronHModel is using NemotronHSdpaAttention, but `torch.nn.functional.scaled_dot_product_attention` does not support `output_attentions=True`. Falling back to the manual attention implementation, "
+1140:                 'but specifying the manual implementation will be required from Transformers version v5.0.0 onwards. This warning can be removed using the argument `attn_implementation="eager"` when loading the model.'
+1246:         # TODO: Check
+1327:     library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+1500:             # TODO: Store attentions
+1506:             # TODO (Check): should it happen before the forward pass?
+1527:         if self.config._attn_implementation == "flash_attention_2":
+1550:             self.config._attn_implementation == "sdpa"
+1715:         # TODO: Check zamba_modeling.py: https://github.com/huggingface/transformers/blob/d7188ba600e36d3fd191b12e19f1b3bb81a8404f/src/transformers/models/zamba/modeling_zamba.py#L1284C1-L1286C2
 
 ========================================================================================================================
 22. RESUMEN PARA CONSTRUIR FORWARD
