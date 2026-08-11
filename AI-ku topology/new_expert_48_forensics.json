@@ -1,0 +1,1663 @@
+{
+  "model_directory": "G:\\Mi unidad\\AI-ku_V4X\\merged_models\\Thinker-Max-V4X-Base",
+  "expert": 48,
+  "tensor_count": 67,
+  "tensors": [
+    {
+      "tensor": "backbone.layers.36.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 36,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.36.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 36,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.36.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 36,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.37.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 37,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.37.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 37,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.37.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 37,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.38.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 38,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.38.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 38,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.38.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00014-of-00021.safetensors",
+      "layer": 38,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.39.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00015-of-00021.safetensors",
+      "layer": 39,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.39.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00015-of-00021.safetensors",
+      "layer": 39,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.39.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00015-of-00021.safetensors",
+      "layer": 39,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.17.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 17,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.18.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 18,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.18.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 18,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.18.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 18,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.19.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 19,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.19.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 19,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.19.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 19,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.20.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 20,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.20.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 20,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.20.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00017-of-00021.safetensors",
+      "layer": 20,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.21.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 21,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.21.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 21,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.21.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 21,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.22.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 22,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.22.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 22,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.22.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 22,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.23.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 23,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.23.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 23,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.23.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 23,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.24.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 24,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.24.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 24,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.24.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00018-of-00021.safetensors",
+      "layer": 24,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.25.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 25,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.25.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 25,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.25.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 25,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.26.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 26,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.26.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 26,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.26.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 26,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.27.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 27,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.27.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 27,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.27.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 27,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.28.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00019-of-00021.safetensors",
+      "layer": 28,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.28.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 28,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.28.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 28,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.29.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 29,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.29.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 29,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.29.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 29,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.30.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 30,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.30.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 30,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.30.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 30,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.31.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 31,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.31.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 31,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.31.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00020-of-00021.safetensors",
+      "layer": 31,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.32.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 32,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.32.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 32,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.32.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 32,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.33.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 33,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.33.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 33,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.33.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 33,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.34.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 34,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.34.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 34,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.34.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 34,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.35.mixer.new_experts.48.down_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 35,
+      "expert": 48,
+      "projection": "down_proj",
+      "shape": [
+        2688,
+        17920
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.35.mixer.new_experts.48.gate_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 35,
+      "expert": 48,
+      "projection": "gate_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    },
+    {
+      "tensor": "backbone.layers.35.mixer.new_experts.48.up_proj.weight",
+      "shard": "model-00021-of-00021.safetensors",
+      "layer": 35,
+      "expert": 48,
+      "projection": "up_proj",
+      "shape": [
+        17920,
+        2688
+      ],
+      "parameters": 48168960
+    }
+  ],
+  "by_layer": {
+    "36": [
+      {
+        "tensor": "backbone.layers.36.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 36,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.36.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 36,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.36.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 36,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "37": [
+      {
+        "tensor": "backbone.layers.37.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 37,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.37.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 37,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.37.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 37,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "38": [
+      {
+        "tensor": "backbone.layers.38.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 38,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.38.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 38,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.38.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00014-of-00021.safetensors",
+        "layer": 38,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "39": [
+      {
+        "tensor": "backbone.layers.39.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00015-of-00021.safetensors",
+        "layer": 39,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.39.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00015-of-00021.safetensors",
+        "layer": 39,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.39.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00015-of-00021.safetensors",
+        "layer": 39,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "17": [
+      {
+        "tensor": "backbone.layers.17.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 17,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "18": [
+      {
+        "tensor": "backbone.layers.18.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 18,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.18.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 18,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.18.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 18,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "19": [
+      {
+        "tensor": "backbone.layers.19.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 19,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.19.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 19,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.19.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 19,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "20": [
+      {
+        "tensor": "backbone.layers.20.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 20,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.20.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 20,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.20.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00017-of-00021.safetensors",
+        "layer": 20,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "21": [
+      {
+        "tensor": "backbone.layers.21.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 21,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.21.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 21,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.21.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 21,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "22": [
+      {
+        "tensor": "backbone.layers.22.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 22,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.22.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 22,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.22.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 22,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "23": [
+      {
+        "tensor": "backbone.layers.23.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 23,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.23.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 23,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.23.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 23,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "24": [
+      {
+        "tensor": "backbone.layers.24.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 24,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.24.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 24,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.24.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00018-of-00021.safetensors",
+        "layer": 24,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "25": [
+      {
+        "tensor": "backbone.layers.25.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 25,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.25.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 25,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.25.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 25,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "26": [
+      {
+        "tensor": "backbone.layers.26.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 26,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.26.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 26,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.26.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 26,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "27": [
+      {
+        "tensor": "backbone.layers.27.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 27,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.27.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 27,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.27.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 27,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "28": [
+      {
+        "tensor": "backbone.layers.28.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00019-of-00021.safetensors",
+        "layer": 28,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.28.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 28,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.28.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 28,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "29": [
+      {
+        "tensor": "backbone.layers.29.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 29,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.29.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 29,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.29.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 29,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "30": [
+      {
+        "tensor": "backbone.layers.30.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 30,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.30.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 30,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.30.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 30,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "31": [
+      {
+        "tensor": "backbone.layers.31.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 31,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.31.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 31,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.31.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00020-of-00021.safetensors",
+        "layer": 31,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "32": [
+      {
+        "tensor": "backbone.layers.32.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 32,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.32.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 32,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.32.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 32,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "33": [
+      {
+        "tensor": "backbone.layers.33.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 33,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.33.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 33,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.33.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 33,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "34": [
+      {
+        "tensor": "backbone.layers.34.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 34,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.34.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 34,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.34.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 34,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ],
+    "35": [
+      {
+        "tensor": "backbone.layers.35.mixer.new_experts.48.down_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 35,
+        "expert": 48,
+        "projection": "down_proj",
+        "shape": [
+          2688,
+          17920
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.35.mixer.new_experts.48.gate_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 35,
+        "expert": 48,
+        "projection": "gate_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      },
+      {
+        "tensor": "backbone.layers.35.mixer.new_experts.48.up_proj.weight",
+        "shard": "model-00021-of-00021.safetensors",
+        "layer": 35,
+        "expert": 48,
+        "projection": "up_proj",
+        "shape": [
+          17920,
+          2688
+        ],
+        "parameters": 48168960
+      }
+    ]
+  }
+}
