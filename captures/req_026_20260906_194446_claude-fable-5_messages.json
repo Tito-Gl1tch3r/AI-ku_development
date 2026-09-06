@@ -1,0 +1,6 @@
+[
+  {
+    "role": "user",
+    "content": "# Session-specific guidance\n - When the user types `/<skill-name>`, invoke it via Skill. Only use skills listed in the user-invocable skills section — don't guess."
+  }
+]
